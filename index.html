@@ -30,7 +30,7 @@ nav.scrolled{background:rgba(6,6,6,.97)!important;border-bottom:1px solid rgba(2
 .nav-cta::after{display:none!important;}
 /* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:140px 40px 100px;position:relative;overflow:hidden;background:url("/Vlor/hero.jpg") center center/cover no-repeat;}
-.hero-glow{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,6,6,.55) 0%,rgba(6,6,6,.4) 50%,rgba(6,6,6,.8) 100%);pointer-events:none;}
+.hero-glow{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,6,6,.7) 0%,rgba(6,6,6,.65) 50%,rgba(6,6,6,.85) 100%);pointer-events:none;}
 .h-line{width:1px;height:72px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);margin:0 auto 48px;animation:fU 1.2s ease forwards;opacity:0;}
 .h-eye{font-size:9.5px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:26px;animation:fU 1s ease .3s forwards;opacity:0;}
 .h-mark{font-family:'Cormorant Garamond',serif;font-size:clamp(80px,15vw,168px);font-weight:300;letter-spacing:.18em;line-height:.9;animation:fU 1s ease .5s forwards;opacity:0;}
@@ -140,17 +140,12 @@ footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;g
 
 <section id="hero">
   <div class="hero-glow"></div>
-  <div class="h-line"></div>
-  <p class="h-eye">Exclusive Growth Agency &nbsp;·&nbsp; Toronto, Canada</p>
-  <h1 class="h-mark">VL<span>O</span>RE</h1>
-  <p class="h-tag">Precision &nbsp;&nbsp;·&nbsp;&nbsp; Prestige &nbsp;&nbsp;·&nbsp;&nbsp; Performance</p>
-  <div class="h-div"><div class="h-dia"></div></div>
-  <p class="h-desc">Where bold brands are built.<br>We craft growth strategies for companies that refuse to be ordinary.</p>
-  <div class="h-ctas">
+  <p class="h-tag" style="animation:fU 1s ease .3s forwards;opacity:0;">Exclusive Growth Agency &nbsp;·&nbsp; Toronto, Canada</p>
+  <div class="h-div" style="animation:fU 1s ease .5s forwards;opacity:0;"><div class="h-dia"></div></div>
+  <div class="h-ctas" style="animation:fU 1s ease .7s forwards;opacity:0;margin-top:0;">
     <a href="/Vlor/services.html" class="btn btn-g">Our Services</a>
     <a href="/Vlor/contact.html" class="btn btn-o">Book a Discovery Call</a>
   </div>
-  <div class="h-scroll">Scroll</div>
 </section>
 
 <div class="mq">
