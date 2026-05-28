@@ -15,7 +15,7 @@ body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-se
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.45;}
 .cur{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .1s;}
 .cur-r{width:30px;height:30px;border:1px solid rgba(201,168,76,.45);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all .15s;}
-nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:26px 64px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(6,6,6,.97),transparent);transition:background .4s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:16px 64px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(6,6,6,.97),transparent);transition:background .4s;}
 nav.scrolled{background:rgba(6,6,6,.97)!important;border-bottom:1px solid rgba(201,168,76,.1);}
 .logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:.35em;color:var(--gold);text-decoration:none;}
 .nav-links{display:flex;align-items:center;gap:44px;list-style:none;}
@@ -102,13 +102,13 @@ footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;g
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="curR"></div>
 <nav id="nav">
-  <a href="index.html" class="logo">VLORE</a>
+  <a href="/vlor/index.html" class="logo"><img src="/vlor/logo.jpg" alt="VLORE" style="height:48px;width:auto;display:block;"></a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="packages.html">Packages</a></li>
-    <li><a href="contact.html" class="nav-cta">Book a Call</a></li>
+    <li><a href="/vlor/index.html">Home</a></li>
+    <li><a href="/vlor/about.html" class="active">About</a></li>
+    <li><a href="/vlor/services.html">Services</a></li>
+    <li><a href="/vlor/packages.html">Packages</a></li>
+    <li><a href="/vlor/contact.html" class="nav-cta">Book a Call</a></li>
   </ul>
 </nav>
 
@@ -140,7 +140,7 @@ footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;g
       <h2 class="st" style="font-size:clamp(28px,3.5vw,44px);">Built for brands that <em>demand more.</em></h2>
       <p style="font-size:13px;line-height:2.1;color:var(--wdim);margin-bottom:18px;">Vlore works with a carefully selected roster of clients — from ambitious local Canadian businesses ready to scale, to international e-commerce brands looking for a strategic edge.</p>
       <p style="font-size:13px;line-height:2.1;color:var(--wdim);margin-bottom:28px;">We are not a volume agency. We are selective by design, because every client we take on deserves our full focus and highest standard of work.</p>
-      <a href="contact.html" class="btn btn-o">Work With Us</a>
+      <a href="/vlor/contact.html" class="btn btn-o">Work With Us</a>
     </div>
   </div>
 </section>
@@ -173,8 +173,8 @@ footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;g
   <div class="rv">
     <h2 class="act">Ready to work with an agency<br>that takes your brand <em>seriously?</em></h2>
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
-      <a href="services.html" class="btn btn-o">Our Services</a>
-      <a href="contact.html" class="btn btn-g">Book a Discovery Call</a>
+      <a href="/vlor/services.html" class="btn btn-o">Our Services</a>
+      <a href="/vlor/contact.html" class="btn btn-g">Book a Discovery Call</a>
     </div>
   </div>
 </section>
@@ -182,7 +182,7 @@ footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;g
 <footer>
   <div class="fl">VLORE</div>
   <nav class="fn">
-    <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="contact.html">Contact</a>
+    <a href="/vlor/index.html">Home</a><a href="/vlor/about.html">About</a><a href="/vlor/services.html">Services</a><a href="/vlor/packages.html">Packages</a><a href="/vlor/contact.html">Contact</a>
   </nav>
   <div class="fc">© 2025 Vlore Agency · Toronto, Canada</div>
 </footer>
