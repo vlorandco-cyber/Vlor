@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — VLORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dim:#7A6030;--black:#060606;--dark2:#111111;--white:#F5F0E8;--wdim:rgba(245,240,232,0.58);--wfaint:rgba(245,240,232,0.22);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.45;}
+.cur{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .1s;}
+.cur-r{width:30px;height:30px;border:1px solid rgba(201,168,76,.45);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all .15s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:26px 64px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(6,6,6,.97),transparent);transition:background .4s;}
+nav.scrolled{background:rgba(6,6,6,.97)!important;border-bottom:1px solid rgba(201,168,76,.1);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:.35em;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;align-items:center;gap:44px;list-style:none;}
+.nav-links a{color:var(--wdim);text-decoration:none;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;transition:color .3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+.nav-cta{border:1px solid rgba(201,168,76,.4)!important;padding:10px 26px;color:var(--gold)!important;}
+.nav-cta:hover{background:var(--gold)!important;color:var(--black)!important;}
+.nav-cta::after{display:none!important;}
+.btn{display:inline-block;padding:14px 38px;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;transition:all .3s;font-family:'Montserrat',sans-serif;font-weight:400;cursor:none;}
+.btn-o{border:1px solid rgba(201,168,76,.4);color:var(--gold);background:transparent;}
+.btn-o:hover{background:rgba(201,168,76,.08);border-color:var(--gold);}
+.sl{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.sl::before{content:'';width:28px;height:1px;background:var(--gold);}
+.rv{opacity:0;transform:translateY(36px);transition:all .85s cubic-bezier(.16,1,.3,1);}
+.rv.on{opacity:1;transform:translateY(0);}
+.ph{padding:180px 64px 80px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(201,168,76,.08);}
+.ph-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 80%,rgba(201,168,76,.06) 0%,transparent 65%);pointer-events:none;}
+.ph-l{font-size:9px;letter-spacing:.55em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;}
+.ph-t{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,8vw,96px);font-weight:300;}
+.ph-t em{color:var(--gold);font-style:italic;}
+.ph-s{font-size:12px;letter-spacing:.18em;color:var(--wdim);margin-top:20px;line-height:1.9;}
+#cbody{padding:100px 64px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:100px;}
+.ci h2{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,48px);font-weight:300;margin-bottom:24px;line-height:1.2;}
+.ci h2 em{color:var(--gold);font-style:italic;}
+.ci p{font-size:12.5px;line-height:2.1;color:var(--wdim);margin-bottom:44px;}
+.cd{display:flex;flex-direction:column;gap:24px;margin-bottom:48px;}
+.cd-item{display:flex;gap:18px;align-items:flex-start;}
+.cd-ic{font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,.25);padding:8px 14px;flex-shrink:0;margin-top:2px;}
+.cd-l{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:4px;}
+.cd-v{font-size:13px;color:var(--white);}
+.cd-v a{color:var(--white);text-decoration:none;transition:color .3s;}
+.cd-v a:hover{color:var(--gold);}
+.cf{display:flex;flex-direction:column;gap:14px;}
+.fg{display:flex;flex-direction:column;gap:6px;}
+.flbl{font-size:8.5px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-dim);}
+.fi{background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.16);color:var(--white);padding:15px 20px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.06em;outline:none;transition:border-color .3s;width:100%;}
+.fi:focus{border-color:rgba(201,168,76,.6);background:rgba(201,168,76,.02);}
+.fi::placeholder{color:rgba(245,240,232,.2);}
+textarea.fi{height:130px;resize:vertical;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;background-color:rgba(255,255,255,.025);}
+.fsub{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:18px;font-family:'Montserrat',sans-serif;font-size:9.5px;letter-spacing:.4em;text-transform:uppercase;cursor:none;transition:all .3s;width:100%;margin-top:6px;}
+.fsub:hover{background:var(--gold);color:var(--black);}
+.fnote{font-size:10px;color:var(--wfaint);text-align:center;letter-spacing:.1em;margin-top:4px;}
+.fsuccess{display:none;text-align:center;padding:60px 40px;border:1px solid rgba(201,168,76,.2);}
+.fsuccess h3{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--gold);margin-bottom:16px;}
+.fsuccess p{font-size:12px;color:var(--wdim);line-height:1.9;}
+footer{padding:50px 64px;border-top:1px solid rgba(201,168,76,.1);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:var(--dark2);}
+.fl{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:.35em;color:var(--gold);}
+.fn{display:flex;gap:32px;}
+.fn a{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--wfaint);text-decoration:none;transition:color .3s;}
+.fn a:hover{color:var(--gold);}
+.fc{font-size:9px;color:rgba(245,240,232,.2);letter-spacing:.12em;text-align:right;}
+@media(max-width:900px){
+  nav{padding:22px 24px;}.nav-links li:not(:last-child){display:none;}
+  .ph{padding:140px 24px 80px;}
+  #cbody{grid-template-columns:1fr;gap:60px;padding:60px 24px;}
+  .fr{grid-template-columns:1fr;}
+  footer{grid-template-columns:1fr;gap:20px;text-align:center;padding:40px 24px;}.fn{justify-content:center;}.fc{text-align:center;}
+}
+</style>
+</head>
+<body>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+<nav id="nav">
+  <a href="index.html" class="logo">VLORE</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="packages.html">Packages</a></li>
+    <li><a href="contact.html" class="nav-cta active">Book a Call</a></li>
+  </ul>
+</nav>
+
+<div class="ph">
+  <div class="ph-bg"></div>
+  <p class="ph-l">Get In Touch</p>
+  <h1 class="ph-t">Let's <em>Connect</em></h1>
+  <p class="ph-s">Tell us about your brand and ambitions.<br>We'll respond within 24 hours.</p>
+</div>
+
+<section id="cbody">
+  <div class="ci rv">
+    <h2>Ready to build<br>something <em>remarkable?</em></h2>
+    <p>We work with a selective roster of clients who are serious about growth. If that's you, we'd love to hear from you — book a discovery call or send us a message below.</p>
+    <div class="cd">
+      <div class="cd-item">
+        <div class="cd-ic">TEL</div>
+        <div><div class="cd-l">Phone</div><div class="cd-v"><a href="tel:+14372995254">+1 (437) 299-5254</a></div></div>
+      </div>
+      <div class="cd-item">
+        <div class="cd-ic">LOC</div>
+        <div><div class="cd-l">Location</div><div class="cd-v">Toronto, Ontario, Canada</div></div>
+      </div>
+      <div class="cd-item">
+        <div class="cd-ic">HRS</div>
+        <div><div class="cd-l">Hours</div><div class="cd-v">Mon – Fri, 9AM – 6PM EST</div></div>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(201,168,76,.12);padding:28px 32px;background:var(--dark2);">
+      <div style="font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;">Response Time</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);">Within 24 hours</div>
+      <div style="font-size:11px;color:var(--wfaint);margin-top:6px;">We take every inquiry seriously.</div>
+    </div>
+  </div>
+
+  <div class="rv">
+    <div class="cf" id="cForm">
+      <p class="sl" style="margin-bottom:32px;">Send a Message</p>
+      <div class="fr">
+        <div class="fg"><label class="flbl">Full Name</label><input type="text" class="fi" placeholder="Jane Smith" id="fn"></div>
+        <div class="fg"><label class="flbl">Email Address</label><input type="email" class="fi" placeholder="jane@brand.com" id="fe"></div>
+      </div>
+      <div class="fg"><label class="flbl">Company / Brand</label><input type="text" class="fi" placeholder="Your brand name" id="fc2"></div>
+      <div class="fg">
+        <label class="flbl">I'm Interested In</label>
+        <select class="fi" id="fs">
+          <option value="" disabled selected>Select a service or package</option>
+          <option>Website Development</option>
+          <option>Paid Advertising</option>
+          <option>Funnel & Conversion Optimization</option>
+          <option>Email Marketing</option>
+          <option>Creative Services</option>
+          <option>Foundation Package ($1,500–$2,000)</option>
+          <option>Growth Package ($3,000–$4,500)</option>
+          <option>Scale Package ($4,500–$7,000)</option>
+          <option>Ongoing Growth Partnership</option>
+          <option>Not sure — I'd like to discuss</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flbl">Tell Us About Your Goals</label><textarea class="fi" placeholder="Share your vision, challenges, and what you'd like to achieve..." id="fm"></textarea></div>
+      <button class="fsub" onclick="handleSubmit()">Send Message — Book a Discovery Call</button>
+      <p class="fnote">We respect your privacy. No spam, ever.</p>
+    </div>
+    <div class="fsuccess" id="fSuccess">
+      <h3>Thank You.</h3>
+      <p>Your message has been received. A member of the Vlore team will be in touch within 24 hours.<br><br>We look forward to learning about your brand.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">VLORE</div>
+  <nav class="fn"><a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="contact.html">Contact</a></nav>
+  <div class="fc">© 2025 Vlore Agency · Toronto, Canada</div>
+</footer>
+<script>
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function a(){cur.style.cssText=`left:${mx-3.5}px;top:${my-3.5}px`;rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.cssText=`left:${rx-15}px;top:${ry-15}px`;requestAnimationFrame(a);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='scale(2.2)';curR.style.transform='scale(1.5)';curR.style.borderColor='rgba(201,168,76,.9)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';curR.style.transform='scale(1)';curR.style.borderColor='rgba(201,168,76,.45)';});
+});
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+function handleSubmit(){
+  const n=document.getElementById('fn').value.trim();
+  const e=document.getElementById('fe').value.trim();
+  if(!n||!e){alert('Please fill in your name and email.');return;}
+  document.getElementById('cForm').style.display='none';
+  document.getElementById('fSuccess').style.display='block';
+}
+</script>
+</body>
+</html>
