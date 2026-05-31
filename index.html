@@ -333,7 +333,7 @@ footer{border-top:1px solid var(--border);padding:36px 60px;display:flex;align-i
 
 @media(pointer:fine){body{cursor:none}#cur{position:fixed;width:7px;height:7px;background:var(--gg,linear-gradient(135deg,#D4AF37,#F5D97B));border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s}#cur-r{position:fixed;width:28px;height:28px;border:1px solid rgba(212,175,55,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .12s,top .12s,width .25s,height .25s}}
 @media(max-width:860px){.nav-links,.nav-cta-link{display:none!important;}.ham{display:flex!important;}}
-.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:2px;}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:2px;margin-left:auto;}
 .ham span{display:block;width:22px;height:1px;background:var(--white,#fff);}
 
 
@@ -346,6 +346,19 @@ html, body {
 .about-hero, .ct-wrap, .book-wrap, .srv-hero,
 section, main, .sec, .sec-sm {
   background-color: #000000;
+}
+
+
+/* ── NAV RIGHT-ALIGN FIX ── */
+nav {
+  justify-content: space-between !important;
+}
+.nav-links {
+  margin-left: auto !important;
+}
+.nav-cta-link {
+  margin-left: 32px !important;
+  flex-shrink: 0;
 }
 
 </style>
@@ -376,7 +389,8 @@ section, main, .sec, .sec-sm {
     <li><a data-p="contact" href="contact.html">Contact</a></li>
   </ul>
   <a href="book.html" class="nav-cta-link"><span>Book a Consultation</span></a>
-  <button class="ham" id="hamBtn"><span></span><span></span><span></span></button>
+
+  <button class="ham" id="hamBtn" style="margin-left:auto"><span></span><span></span><span></span></button>
 </nav>
 
 <main>
