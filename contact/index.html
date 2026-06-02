@@ -6,7 +6,7 @@
 <title>Contact VLORE | Marketing Agency Toronto</title>
 <meta name="description" content="Contact VLORE marketing and business development agency. Email hello@vlore.ca or book a consultation."/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://vlore.ca/contact"/>
+<link rel="canonical" href="https://vlore.ca/contact.html"/>
 <meta property="og:title" content="Contact VLORE | Marketing Agency Toronto"/>
 <meta property="og:description" content="Contact VLORE marketing and business development agency. Email hello@vlore.ca or book a consultation."/>
 <meta property="og:url" content="https://vlore.ca/contact.html"/>
@@ -546,10 +546,38 @@ nav#nav,
 }
 
 
-/* ── CURSOR ALWAYS ON TOP ── */
-#cur, #cur-r {
-  z-index: 999999 !important;
+
+/* ══ CONTACT PAGE COLOR ══ */
+.ct-wrap {
+  background: radial-gradient(ellipse 120% 100% at 60% 0%, #3D1A10 0%, #1F0A07 35%, #150806 65%, #0C0B09 100%) !important;
+  position: relative;
+  overflow: hidden;
 }
+/* Subtle glow only — no lines */
+.ct-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(139,26,26,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 90%, rgba(61,20,10,0.4) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+.ct-wrap .wrap { position: relative; z-index: 1; }
+.ct-wrap h1, .ct-wrap .t-xl {
+  color: #F0E4D0 !important;
+  -webkit-text-fill-color: #F0E4D0 !important;
+}
+.ct-wrap .lbl, .ct-wrap .ct-type { color: #C9A84C !important; }
+.ct-wrap .gline { background: linear-gradient(135deg,#C9A84C,#E8C97A) !important; }
+.ct-wrap .ct-item { border-top: 1px solid rgba(200,175,140,0.12) !important; }
+.ct-wrap .ct-item a, .ct-wrap .ct-item span { color: #EDE0CC !important; -webkit-text-fill-color: #EDE0CC !important; }
+.ct-wrap .ct-item a:hover { color: #C9A84C !important; -webkit-text-fill-color: #C9A84C !important; }
+.ct-wrap h2 { color: #F0E4D0 !important; -webkit-text-fill-color: #F0E4D0 !important; }
+.ct-wrap input, .ct-wrap textarea { border-bottom-color: rgba(200,175,140,0.15) !important; color: #F0E4D0 !important; }
+.ct-wrap input:focus, .ct-wrap textarea:focus { border-bottom-color: #C9A84C !important; }
+.ct-wrap input::placeholder, .ct-wrap textarea::placeholder { color: rgba(240,228,208,0.2) !important; }
 
 </style>
 </head>
