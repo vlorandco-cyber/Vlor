@@ -6,7 +6,7 @@
 <title>Services & Pricing | VLORE Marketing Agency Toronto</title>
 <meta name="description" content="VLORE offers website development, paid advertising, SEO, brand identity, and print design. Transparent CAD pricing."/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://vlore.ca/services"/>
+<link rel="canonical" href="https://vlore.ca/services.html"/>
 <meta property="og:title" content="Services & Pricing | VLORE Marketing Agency Toronto"/>
 <meta property="og:description" content="VLORE offers website development, paid advertising, SEO, brand identity, and print design. Transparent CAD pricing."/>
 <meta property="og:url" content="https://vlore.ca/services.html"/>
@@ -550,6 +550,11 @@ nav#nav,
   }
 }
 
+
+/* Touch cursor visibility */
+#cur { opacity: 0; transition: opacity .4s, width .2s, height .2s !important; }
+@media(pointer:fine){ #cur { opacity: 1 !important; } body { cursor: none !important; } }
+
 </style>
 </head>
 <body data-page="services">
@@ -561,6 +566,7 @@ nav#nav,
   <a href="/">Home</a>
   <a href="/about">About</a>
   <a href="/services">Services</a>
+  <a href="/packages">Packages</a>
   <a href="/book">Book</a>
   <a href="/contact">Contact</a>
 </div>
@@ -573,6 +579,7 @@ nav#nav,
     <li><a data-p="home" href="/">Home</a></li>
     <li><a data-p="about" href="/about">About</a></li>
     <li><a data-p="services" href="/services">Services</a></li>
+    <li><a data-p="packages" href="/packages">Packages</a></li>
     <li><a data-p="book" href="/book">Book</a></li>
     <li><a data-p="contact" href="/contact">Contact</a></li>
   </ul>
@@ -839,6 +846,30 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 }
 
 })();
+
+// Touch cursor for mobile
+(function(){
+  var cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+  if(!cur||!curR) return;
+  document.addEventListener('touchmove',function(e){
+    var t=e.touches[0];
+    cur.style.opacity='1';
+    cur.style.left=t.clientX+'px'; cur.style.top=t.clientY+'px';
+    curR.style.left=t.clientX+'px'; curR.style.top=t.clientY+'px';
+  },{passive:true});
+  document.addEventListener('touchstart',function(e){
+    var t=e.touches[0];
+    cur.style.opacity='1';
+    cur.style.width='14px'; cur.style.height='14px';
+    cur.style.left=t.clientX+'px'; cur.style.top=t.clientY+'px';
+    curR.style.left=t.clientX+'px'; curR.style.top=t.clientY+'px';
+  },{passive:true});
+  document.addEventListener('touchend',function(){
+    cur.style.width='10px'; cur.style.height='10px';
+    setTimeout(function(){cur.style.opacity='0';},800);
+  },{passive:true});
+})();
+
 </script>
 </body>
 </html>
