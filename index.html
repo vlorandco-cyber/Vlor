@@ -647,7 +647,7 @@ nav#nav,
     </div>
 
     <!-- SVG Scene -->
-    <div id="mviz-wrap" style="width:100%;height:min(55vw,420px);position:relative;background:#080808">
+    <div id="mviz-wrap" style="width:100%;height:min(95vw,520px);position:relative;background:#080808">
       <svg id="mviz-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;background:#080808"></svg>
     </div>
 
@@ -717,7 +717,9 @@ nav#nav,
 
       var svg = document.getElementById('mviz-svg');
       svg.setAttribute('width',W); svg.setAttribute('height',H);
-      var CX=W*.5, CY=H*.5, RAD=Math.min(W*.19,H*.36);
+      var CX=W*.5, CY=W<500 ? H*.46 : H*.5;
+      // On mobile give more space - use larger fraction
+      var RAD=W<500 ? Math.min(W*.22,H*.32) : Math.min(W*.19,H*.36);
       var GOLD='#D4AF37';
       var figs=[], uid=0, T=0, curSvc=null, clicks=0;
 
@@ -746,8 +748,24 @@ nav#nav,
       svg.appendChild(ns('circle',{cx:CX,cy:CY,r:RAD*1.72,fill:'none',stroke:'rgba(255,255,255,0.08)',strokeWidth:1,'stroke-dasharray':'2 10'}));
 
       // Zone labels
-      var dz=ns('text',{x:CX+RAD*1.76,y:CY,'text-anchor':'start','dominant-baseline':'middle',fill:'rgba(255,255,255,0.18)','font-size':7,'font-family':'Montserrat,sans-serif','letter-spacing':'0.35em'});
+      // Discovery zone label — always visible, positioned in scene
+      var dzFontSize = W < 500 ? 7 : 8;
+      // Top center of scene, above the outer ring
+      var dzY = CY - RAD*1.72 - 14;
+      if(dzY < 16) dzY = 16; // never go off top of scene
+      var dz=ns('text',{x:CX,y:dzY,'text-anchor':'middle',
+        fill:'rgba(255,255,255,0.55)','font-size':dzFontSize,
+        'font-family':'Montserrat,sans-serif','letter-spacing':'0.32em',
+        'font-weight':'400'});
       dz.textContent='DISCOVERY ZONE'; svg.appendChild(dz);
+      // Decorative lines either side of label
+      var lineLen = W < 500 ? 22 : 32;
+      var txtW = dzFontSize * 9; // approx text width
+      var dl1=ns('line',{x1:CX-txtW/2-lineLen-4,y1:dzY,x2:CX-txtW/2-4,y2:dzY,
+        stroke:'rgba(255,255,255,0.3)',strokeWidth:.8});
+      var dl2=ns('line',{x1:CX+txtW/2+4,y1:dzY,x2:CX+txtW/2+lineLen+4,y2:dzY,
+        stroke:'rgba(255,255,255,0.3)',strokeWidth:.8});
+      svg.appendChild(dl1); svg.appendChild(dl2);
 
       var pulseR=[];
       for(var i=0;i<4;i++){var pr=ns('circle',{cx:CX,cy:CY,r:RAD*(1+i*.18),fill:'none',stroke:'rgba(212,175,55,0.06)',strokeWidth:1,opacity:0});svg.appendChild(pr);pulseR.push(pr);}
@@ -755,9 +773,12 @@ nav#nav,
       var circEl=ns('circle',{cx:CX,cy:CY,r:RAD,fill:'url(#mvcF)',stroke:'rgba(212,175,55,0.52)',strokeWidth:1.5});
       svg.appendChild(circEl);
 
-      var czl=ns('text',{x:CX,y:CY+RAD*.8,'text-anchor':'middle',fill:'rgba(212,175,55,0.22)','font-size':7,'font-family':'Montserrat,sans-serif','letter-spacing':'0.35em'});
+      var czl=ns('text',{x:CX,y:CY+RAD*.76,'text-anchor':'middle',fill:'rgba(212,175,55,0.55)',
+        'font-size':W<500?7:8,'font-family':'Montserrat,sans-serif','letter-spacing':'0.3em','font-weight':'400'});
       czl.textContent='CONVERSION ZONE'; svg.appendChild(czl);
-      var ybl=ns('text',{x:CX,y:CY-RAD-11,'text-anchor':'middle',fill:'rgba(212,175,55,0.28)','font-size':7,'font-family':'Montserrat,sans-serif','letter-spacing':'0.42em'});
+      // YOUR BUSINESS label just above the gold circle
+      var ybl=ns('text',{x:CX,y:CY-RAD-9,'text-anchor':'middle',fill:'rgba(212,175,55,0.65)',
+        'font-size':W<500?7:8,'font-family':'Montserrat,sans-serif','letter-spacing':'0.38em','font-weight':'400'});
       ybl.textContent='YOUR BUSINESS'; svg.appendChild(ybl);
 
       var starSize=RAD*.38;
@@ -787,7 +808,7 @@ nav#nav,
         return{x:CX+Math.cos(fig.angle)*r,y:CY+Math.sin(fig.angle)*r};
       }
       function mkFig(o){
-        var f=Object.assign({id:++uid,angle:Math.random()*Math.PI*2,df:Math.random(),state:'outside',gold:false,goldType:null,size:6+Math.random()*3.5,bob:Math.random()*Math.PI*2,wig:Math.random()*Math.PI*2,el:null},o||{});
+        var f=Object.assign({id:++uid,angle:Math.random()*Math.PI*2,df:Math.random(),state:'outside',gold:false,goldType:null,size:(W<500?4.5:6)+Math.random()*(W<500?2.5:3.5),bob:Math.random()*Math.PI*2,wig:Math.random()*Math.PI*2,el:null},o||{});
         f.el=drawHuman(f);figs.push(f);return f;
       }
       function redraw(fig){if(fig.el&&fig.el.parentNode)fig.el.parentNode.removeChild(fig.el);fig.el=drawHuman(fig);}
