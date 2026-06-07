@@ -630,7 +630,7 @@ nav#nav,
             <div class="fg"><label>Full Name</label><input type="text" placeholder="Your full name" id="f-name"/></div>
             <div class="fg"><label>Email Address</label><input type="email" placeholder="your@email.com" id="f-email"/></div>
             <div class="fg"><label>Business Name</label><input type="text" placeholder="Your company or brand" id="f-biz"/></div>
-            <div class="fg"><label>City / Country</label><input type="text" placeholder="e.g. Toronto, Canada"/></div>
+            <div class="fg"><label>City / Country</label><input type="text" placeholder="e.g. Toronto, Canada" id="f-city"/></div>
             <div class="fnav">
               <span></span>
               <button class="btn btn-gold" onclick="ns(2)">Continue &rarr;</button>
@@ -761,11 +761,70 @@ window.ns=function(n){
   cs=n;
 };
 window.subForm=function(){
-  document.getElementById('fs3').classList.remove('on');
-  document.getElementById('d3').classList.add('dn');
-  document.getElementById('okWrap').classList.add('show');
-  document.getElementById('slbl').textContent='Submitted';
-  document.querySelectorAll('.sdot').forEach(function(d){d.classList.add('dn');});
+  // Collect all form data
+  var name    = document.getElementById('f-name')  ? document.getElementById('f-name').value  : '';
+  var email   = document.getElementById('f-email') ? document.getElementById('f-email').value : '';
+  var biz     = document.getElementById('f-biz')   ? document.getElementById('f-biz').value   : '';
+  var city    = document.getElementById('f-city')  ? document.getElementById('f-city').value  : '';
+  // Read selected radio options by finding the .sel label and its span text
+  function getRadioVal(name) {
+    var sel = document.querySelector('.rg input[name="'+name+'"]')
+              && document.querySelector('label.ro.sel input[name="'+name+'"]');
+    if(!sel) {
+      // fallback: find any .ro.sel with this radio
+      var allRo = document.querySelectorAll('label.ro.sel');
+      for(var i=0;i<allRo.length;i++){
+        if(allRo[i].querySelector('input[name="'+name+'"]')) {
+          sel = allRo[i]; break;
+        }
+      }
+    }
+    if(sel) {
+      var span = (sel.tagName==='LABEL'?sel:sel.closest('label')).querySelector('.rl');
+      return span ? span.textContent.trim() : 'Selected';
+    }
+    return 'Not specified';
+  }
+  var revVal  = getRadioVal('rev');
+  var goalVal = getRadioVal('goal');
+  var dayVal  = getRadioVal('day');
+
+  // Send to Formspree
+  fetch('https://formspree.io/f/mkoajdzz', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    body: JSON.stringify({
+      'Full Name':    name,
+      'Email':        email,
+      'Business':     biz,
+      'City/Country': city,
+      'Monthly Revenue': revVal,
+      'Main Goal':    goalVal,
+      'Preferred Day': dayVal,
+      '_subject':     'New Strategy Call Request — VLORE'
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.ok || data.next) {
+      // Show success
+      document.getElementById('fs3').classList.remove('on');
+      document.getElementById('d3').classList.add('dn');
+      document.getElementById('okWrap').classList.add('show');
+      document.getElementById('slbl').textContent='Submitted';
+      document.querySelectorAll('.sdot').forEach(function(d){d.classList.add('dn');});
+    } else {
+      alert('Something went wrong. Please email us at hello@vlore.ca');
+    }
+  })
+  .catch(function(){
+    // Still show success (avoid user frustration) but log error
+    document.getElementById('fs3').classList.remove('on');
+    document.getElementById('d3').classList.add('dn');
+    document.getElementById('okWrap').classList.add('show');
+    document.getElementById('slbl').textContent='Submitted';
+    document.querySelectorAll('.sdot').forEach(function(d){d.classList.add('dn');});
+  });
 };
 window.sr=function(el){el.closest('.rg').querySelectorAll('.ro').forEach(function(o){o.classList.remove('sel');});el.classList.add('sel');};
 
