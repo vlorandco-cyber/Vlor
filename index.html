@@ -647,7 +647,7 @@ nav#nav,
   <section id="mkt-viz" style="background:#080808;padding:0;position:relative;overflow:hidden">
 
     <!-- Section header -->
-    <div style="text-align:center;padding:80px 24px 0;position:relative;z-index:5">
+    <div class="mviz-hdr" style="text-align:center;padding:80px 24px 0;position:relative;z-index:5">
       <span style="display:inline-block;font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:rgba(212,175,55,.55);margin-bottom:16px">Why Businesses Don't Grow</span>
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,62px);font-weight:300;color:#F5F0E8;line-height:1.06;margin-bottom:0">
         Where are you<br/><em style="color:#D4AF37;font-style:italic">losing clients right now?</em>
@@ -656,56 +656,77 @@ nav#nav,
     </div>
 
     <!-- SVG Scene -->
-    <div id="mviz-wrap" style="width:100%;height:min(95vw,520px);position:relative;background:#080808">
-      <svg id="mviz-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;background:#080808"></svg>
-    </div>
+    <!-- ── Outer flex: circle left, panel right on desktop ─────────────── -->
+    <div class="mviz-outer">
 
-    <!-- Copy box -->
-    <div style="position:relative;z-index:5;padding:0 20px 14px;max-width:860px;margin:0 auto">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px;flex-wrap:wrap">
-        <div id="mv-tags" style="display:flex;gap:5px;flex-wrap:wrap">
-          <span style="font-size:7px;letter-spacing:.22em;text-transform:uppercase;padding:2px 8px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5)">Click a service below</span>
-        </div>
-        <div style="text-align:right">
-          <div id="mv-eff-lbl" style="font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:3px"></div>
-          <div id="mv-eff-dots" style="display:flex;gap:3px;justify-content:flex-end"></div>
-        </div>
+      <!-- SVG Scene -->
+      <div id="mviz-wrap" class="mviz-circle-col">
+        <svg id="mviz-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;background:#080808"></svg>
       </div>
-      <div id="mv-head" style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.4vw,26px);font-weight:300;color:#fff;line-height:1.2;margin-bottom:4px;transition:all .4s">What is your business missing right now?</div>
-      <div id="mv-body" style="font-size:10.5px;color:rgba(255,255,255,.38);line-height:1.65;max-width:680px;transition:all .4s">Every business loses revenue at two stages: not enough people discover you, and not enough of those people buy. Click any service to see exactly what it does to your growth.</div>
-      <div id="mv-stat" style="font-size:11px;font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:5px;transition:all .4s"></div>
-    </div>
 
-    <!-- Services -->
-    <div style="padding:4px 20px 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:1100px;margin:0 auto">
-      <div style="margin-bottom:8px">
-        <div style="font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:6px;display:flex;align-items:center;gap:6px">
-          <span style="width:10px;height:1px;background:rgba(255,255,255,.2);display:inline-block"></span>Exposure — people discover you
-        </div>
-        <div id="mv-exp-row" style="display:flex;gap:5px;flex-wrap:nowrap"></div>
-      </div>
-      <div>
-        <div style="font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,175,55,.45);margin-bottom:6px;display:flex;align-items:center;gap:6px">
-          <span style="width:10px;height:1px;background:rgba(212,175,55,.38);display:inline-block"></span>Conversion — people pay you
-        </div>
-        <div id="mv-conv-row" style="display:flex;gap:5px;flex-wrap:nowrap"></div>
-      </div>
-    </div>
+      <!-- Right panel: copy + chips + CTA -->
+      <div class="mviz-right-col">
 
-    <!-- CTA — appears after 2 interactions -->
-    <div id="mv-cta" style="text-align:center;padding:0 20px 60px;opacity:0;transform:translateY(16px);transition:all .7s ease;pointer-events:none">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:rgba(245,240,232,.45);margin-bottom:20px">Now you know what's missing. Let's fix it.</p>
-      <a href="/book" style="display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#8A6A1F,#C9A227,#D4AF37);color:#080808;font-size:9px;letter-spacing:.32em;text-transform:uppercase;text-decoration:none;font-weight:500;transition:opacity .3s">Book a Free Strategy Call</a>
-    </div>
+        <!-- Copy box -->
+        <div style="margin-bottom:16px">
+          <div id="mv-tags" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+            <span style="font-size:7px;letter-spacing:.22em;text-transform:uppercase;padding:2px 8px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5)">Click a service below</span>
+          </div>
+          <div id="mv-head" style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.4vw,26px);font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;transition:all .4s">What is your business missing right now?</div>
+          <div id="mv-body" style="font-size:10.5px;color:rgba(255,255,255,.38);line-height:1.65;transition:all .4s">Every business loses revenue at two stages: not enough people discover you, and not enough of those people buy. Click any service to see exactly what it does to your growth.</div>
+          <div id="mv-stat" style="font-size:11px;font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:5px;transition:all .4s"></div>
+        </div>
+
+        <!-- Services -->
+        <div style="margin-bottom:16px">
+          <div style="margin-bottom:10px">
+            <div style="font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:6px;display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:1px;background:rgba(255,255,255,.2);display:inline-block"></span>Exposure — people discover you
+            </div>
+            <div id="mv-exp-row" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+          </div>
+          <div>
+            <div style="font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,175,55,.45);margin-bottom:6px;display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:1px;background:rgba(212,175,55,.38);display:inline-block"></span>Conversion — people pay you
+            </div>
+            <div id="mv-conv-row" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+          </div>
+        </div>
+
+        <!-- CTA — appears after 2 interactions -->
+        <div id="mv-cta" style="opacity:0;transform:translateY(16px);transition:all .7s ease;pointer-events:none">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:rgba(245,240,232,.45);margin-bottom:20px">Now you know what's missing. Let's fix it.</p>
+          <a href="/book" style="display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#8A6A1F,#C9A227,#D4AF37);color:#080808;font-size:9px;letter-spacing:.32em;text-transform:uppercase;text-decoration:none;font-weight:500;transition:opacity .3s">Book a Free Strategy Call</a>
+        </div>
+
+      </div><!-- /mviz-right-col -->
+    </div><!-- /mviz-outer -->
   </section>
 
   <style>
-  .mv-chip{border:1px solid;padding:8px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .28s;white-space:nowrap;background:transparent;color:inherit;border-radius:2px;font-family:'Montserrat',sans-serif}
-  .mv-chip.e{border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
-  .mv-chip.e:hover,.mv-chip.e.mv-on{border-color:rgba(255,255,255,.55);color:#fff;background:rgba(255,255,255,.06)}
-  .mv-chip.cc{border-color:rgba(212,175,55,.15);color:rgba(212,175,55,.55)}
-  .mv-chip.cc:hover,.mv-chip.cc.mv-on{border-color:#D4AF37;color:#D4AF37;background:rgba(212,175,55,.09)}
-  .mv-ci{font-size:10px}.mv-cl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:400}
+  /* ── Side-by-side layout ────────────────────────────── */
+  .mviz-outer{display:flex;flex-direction:column;background:#080808}
+  .mviz-circle-col{width:100%;height:min(95vw,480px);position:relative;background:#080808;flex-shrink:0}
+  .mviz-right-col{padding:16px 20px 40px;background:#080808}
+  @media(min-width:820px){
+    .mviz-outer{flex-direction:row;align-items:flex-start;padding:0 40px 60px;gap:48px;max-width:1200px;margin:0 auto}
+    .mviz-circle-col{width:480px;height:480px;flex:0 0 480px}
+    .mviz-right-col{flex:1;min-width:0;padding:40px 0 0;background:transparent}
+  }
+  /* ── Mobile: tighten everything so chips are visible ── */
+  @media(max-width:819px){
+    .mviz-hdr{padding-top:28px !important}
+    .mviz-hdr > div:last-child{margin-top:12px !important;height:24px !important}
+    .mviz-circle-col{height:min(76vw,300px) !important}
+    .mviz-right-col{padding:6px 16px 20px !important}
+  }
+  /* ──────────────────────────────────────────────────── */
+  .mv-chip{border:1px solid;padding:10px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .15s;white-space:nowrap;background:transparent;color:inherit;border-radius:2px;font-family:'Montserrat',sans-serif}
+  .mv-chip.e{border-color:rgba(255,255,255,.32);color:rgba(255,255,255,.72)}
+  .mv-chip.e:hover,.mv-chip.e.mv-on{border-color:rgba(255,255,255,.8);color:#fff;background:rgba(255,255,255,.08)}
+  .mv-chip.cc{border-color:rgba(212,175,55,.42);color:rgba(212,175,55,.82)}
+  .mv-chip.cc:hover,.mv-chip.cc.mv-on{border-color:#D4AF37;color:#D4AF37;background:rgba(212,175,55,.12)}
+  .mv-ci{font-size:11px}.mv-cl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
   .mv-edot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:inline-block}
   .mv-edot.fe{background:rgba(255,255,255,.75);border-color:rgba(255,255,255,.5)}
   .mv-edot.fc{background:#D4AF37;border-color:rgba(212,175,55,.7);box-shadow:0 0 4px rgba(212,175,55,.4)}
@@ -726,9 +747,9 @@ nav#nav,
 
       var svg = document.getElementById('mviz-svg');
       svg.setAttribute('width',W); svg.setAttribute('height',H);
-      var CX=W*.5, CY=W<500 ? H*.46 : H*.5;
-      // On mobile give more space - use larger fraction
-      var RAD=W<500 ? Math.min(W*.22,H*.32) : Math.min(W*.19,H*.36);
+      var CX=W*.5, CY=W<500 ? H*.47 : H*.5;
+      // Tighter radius for small mobile canvas
+      var RAD=W<500 ? Math.min(W*.22, H*.34) : Math.min(W*.19,H*.36);
       var GOLD='#D4AF37';
       var figs=[], uid=0, T=0, curSvc=null, clicks=0;
 
@@ -775,6 +796,34 @@ nav#nav,
       var dl2=ns('line',{x1:CX+txtW/2+4,y1:dzY,x2:CX+txtW/2+lineLen+4,y2:dzY,
         stroke:'rgba(255,255,255,0.3)',strokeWidth:.8});
       svg.appendChild(dl1); svg.appendChild(dl2);
+
+      // ── Ambient particles in discovery zone ──────────────────────────────
+      var ambPts=[];
+      // Two subtle orbit rings between inner circle and outer dashed ring
+      var orb1=ns('circle',{cx:CX,cy:CY,r:RAD*1.28,fill:'none',
+        stroke:'rgba(212,175,55,0.07)',strokeWidth:.8,'stroke-dasharray':'1 14'});
+      var orb2=ns('circle',{cx:CX,cy:CY,r:RAD*1.50,fill:'none',
+        stroke:'rgba(255,255,255,0.04)',strokeWidth:.6,'stroke-dasharray':'1 18'});
+      svg.appendChild(orb1); svg.appendChild(orb2);
+      // Static glimmer dots scattered through discovery zone
+      var glimmerData=[
+        {a:0.22, r:1.18},{a:0.68, r:1.32},{a:1.10, r:1.25},{a:1.55, r:1.42},
+        {a:1.92, r:1.15},{a:2.35, r:1.38},{a:2.78, r:1.22},{a:3.20, r:1.48},
+        {a:3.65, r:1.19},{a:4.05, r:1.35},{a:4.50, r:1.28},{a:4.90, r:1.45},
+        {a:5.30, r:1.17},{a:5.72, r:1.39},{a:0.45, r:1.55},{a:1.78, r:1.58},
+        {a:3.00, r:1.60},{a:4.22, r:1.56},{a:5.50, r:1.53},{a:2.55, r:1.62}
+      ];
+      glimmerData.forEach(function(gd,gi){
+        var px=CX+Math.cos(gd.a)*RAD*gd.r;
+        var py=CY+Math.sin(gd.a)*RAD*gd.r;
+        var sz=gi%3===0?1.5:gi%3===1?1.0:0.7;
+        var op=gi%3===0?0.45:gi%3===1?0.3:0.2;
+        var col=gi%4===0?GOLD:'rgba(255,255,255,'+op+')';
+        var pt=ns('circle',{cx:px,cy:py,r:sz,fill:col,opacity:op});
+        svg.appendChild(pt);
+        ambPts.push({el:pt,baseX:px,baseY:py,phase:gi*0.47,speed:0.18+gi*0.012,amp:RAD*.018,opBase:op,isGold:gi%4===0});
+      });
+      // ─────────────────────────────────────────────────────────────────────
 
       var pulseR=[];
       for(var i=0;i<4;i++){var pr=ns('circle',{cx:CX,cy:CY,r:RAD*(1+i*.18),fill:'none',stroke:'rgba(212,175,55,0.06)',strokeWidth:1,opacity:0});svg.appendChild(pr);pulseR.push(pr);}
@@ -826,7 +875,7 @@ nav#nav,
         if(st==='inside'){fig.gold=true;if(warm)fig.goldType='warm';fig.df=0.1+Math.random()*0.85;fig.angle+=(Math.random()-.5)*0.8;}
         if(fig.gold!==wasG)redraw(fig);
       }
-      function fadeIn(fig){if(!fig.el)return;fig.el.setAttribute('opacity',0);fig.el.appendChild(ns('animate',{attributeName:'opacity',from:0,to:.92,dur:'.6s',fill:'freeze'}));}
+      function fadeIn(fig){if(!fig.el)return;fig.el.setAttribute('opacity',0);fig.el.appendChild(ns('animate',{attributeName:'opacity',from:0,to:.92,dur:'.25s',fill:'freeze'}));}
       function burst(n,big){
         for(var i=0;i<n;i++){
           var angle=(i/n)*Math.PI*2,r=RAD*(big?.92:.96);
@@ -834,11 +883,11 @@ nav#nav,
           svg.insertBefore(p,starEl);
           var tx=CX+Math.cos(angle+(Math.random()-.5)*.5)*RAD*(.12+Math.random()*.3);
           var ty=CY+Math.sin(angle+(Math.random()-.5)*.5)*RAD*(.12+Math.random()*.3);
-          p.appendChild(ns('animate',{attributeName:'cx',from:CX+Math.cos(angle)*r,to:tx,dur:'1.2s',fill:'freeze',calcMode:'spline',keySplines:'0.4 0 0.2 1'}));
-          p.appendChild(ns('animate',{attributeName:'cy',from:CY+Math.sin(angle)*r,to:ty,dur:'1.2s',fill:'freeze',calcMode:'spline',keySplines:'0.4 0 0.2 1'}));
-          p.appendChild(ns('animate',{attributeName:'opacity',from:.85,to:0,dur:'1.2s',fill:'freeze'}));
-          p.appendChild(ns('animate',{attributeName:'r',from:big?3:2,to:.5,dur:'1.2s',fill:'freeze'}));
-          setTimeout(function(_p){if(_p.parentNode)_p.parentNode.removeChild(_p);},1350,p);
+          p.appendChild(ns('animate',{attributeName:'cx',from:CX+Math.cos(angle)*r,to:tx,dur:'.55s',fill:'freeze',calcMode:'spline',keySplines:'0.4 0 0.2 1'}));
+          p.appendChild(ns('animate',{attributeName:'cy',from:CY+Math.sin(angle)*r,to:ty,dur:'.55s',fill:'freeze',calcMode:'spline',keySplines:'0.4 0 0.2 1'}));
+          p.appendChild(ns('animate',{attributeName:'opacity',from:.85,to:0,dur:'.55s',fill:'freeze'}));
+          p.appendChild(ns('animate',{attributeName:'r',from:big?3:2,to:.5,dur:'.55s',fill:'freeze'}));
+          setTimeout(function(_p){if(_p.parentNode)_p.parentNode.removeChild(_p);},650,p);
         }
       }
 
@@ -869,42 +918,48 @@ nav#nav,
           circEl.setAttribute('stroke','rgba(212,175,55,'+gp+')');
           circEl.setAttribute('stroke-width',1.5+Math.sin(T*1.4)*.7);
         }
+        // Animate ambient discovery-zone particles
+        ambPts.forEach(function(ap){
+          var drift=Math.sin(T*ap.speed+ap.phase)*ap.amp;
+          var driftY=Math.cos(T*ap.speed*.7+ap.phase+1.2)*ap.amp*.6;
+          ap.el.setAttribute('cx',ap.baseX+drift);
+          ap.el.setAttribute('cy',ap.baseY+driftY);
+          // Gentle twinkle
+          var tw=ap.opBase*(0.55+Math.abs(Math.sin(T*ap.speed*1.4+ap.phase))*.45);
+          ap.el.setAttribute('opacity',tw);
+        });
+        // Slowly rotate the orbit rings
+        orb1.setAttribute('transform','rotate('+(T*3)+','+CX+','+CY+')');
+        orb2.setAttribute('transform','rotate('+(-T*2)+','+CX+','+CY+')');
         requestAnimationFrame(loop);
       }
 
       var SVCS={
         exposure:[
           {id:'seo',label:'SEO',icon:'◎',type:'exposure',expEff:4,pulse:true,tags:['Exposure','Organic'],stat:'📊 14.6% of SEO leads close vs 1.7% outbound. Organic traffic is free — forever.',statType:'es',head:"People search for what you offer every day. You don't show up on Google.",body:"68% of all online experiences start with a search. Right now people in your city are typing exactly what you sell. Without SEO, 95% of them never find you. SEO builds your visibility so buyers find you organically — no cost per click, compounding every month.",
-           effect:function(){for(var i=0;i<22;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.45+Math.random()*.42});fadeIn(f);setTimeout(function(){setS(f,'aware');},900+ii*40);},ii*110);})(i);setTimeout(function(){figs.filter(function(f){return f.state==='aware';}).slice(0,8).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*200);});},3400);}},
+           effect:function(){for(var i=0;i<22;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.45+Math.random()*.42});fadeIn(f);setTimeout(function(){setS(f,'aware');},200+ii*15);},ii*45);})(i);setTimeout(function(){figs.filter(function(f){return f.state==='aware';}).slice(0,8).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*70);});},1400);}},
           {id:'google-ads',label:'Google Ads',icon:'◆',type:'exposure',expEff:5,pulse:true,tags:['Exposure','Instant'],stat:'📊 Google Ads average 200% ROI. Your competitor is already bidding on your customers.',statType:'es',head:"Your competitor pays Google to appear above you. Their phone rings. Yours doesn't.",body:"Every relevant search shows your competitor first because they paid for it. Google Ads puts you at the top instantly — targeting only people actively searching for what you sell. Fastest way to get clients this week, not next year.",
-           effect:function(){for(var i=0;i<28;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.3+Math.random()*.45});fadeIn(f);setTimeout(function(){setS(f,Math.random()>.4?'near':'aware');},300+ii*25);},ii*42);})(i);}},
+           effect:function(){for(var i=0;i<28;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.3+Math.random()*.45});fadeIn(f);setTimeout(function(){setS(f,Math.random()>.4?'near':'aware');},80+ii*10);},ii*18);})(i);}},
           {id:'social',label:'Social Media',icon:'◉',type:'exposure',expEff:4,pulse:true,tags:['Exposure','Daily'],stat:'📊 54% of buyers research on social before buying. No presence = no trust.',statType:'es',head:"Your customers scroll 3 hours a day. They have never seen your business once.",body:"Social media is where trust forms before any purchase. People discover brands, build familiarity and decide who feels credible — all before visiting a website. Consistent social presence creates daily touchpoints. When they are ready to buy, they already know your name.",
-           effect:function(){for(var i=0;i<20;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.4+Math.random()*.42});fadeIn(f);setTimeout(function(){setS(f,'aware');},700+ii*55);},ii*85);})(i);}},
+           effect:function(){for(var i=0;i<20;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.4+Math.random()*.42});fadeIn(f);setTimeout(function(){setS(f,'aware');},150+ii*20);},ii*38);})(i);}},
           {id:'flyer',label:'Flyer / Print',icon:'◰',type:'exposure',expEff:2,pulse:false,tags:['Exposure','Local'],stat:'📊 73% of people trust print ads more than digital. Physical presence compounds trust.',statType:'es',head:"Your neighbourhood does not know you exist. A competitor's flyer is on their fridge.",body:"Physical advertising reaches people who will never find you online. At events, letterboxes, and local areas it lands in hands and stays visible. When someone sees your brand offline AND online, trust builds twice as fast.",
-           effect:function(){for(var i=0;i<12;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.48+Math.random()*.38});fadeIn(f);setTimeout(function(){setS(f,'aware');},600);},ii*110);})(i);}},
+           effect:function(){for(var i=0;i<12;i++)(function(ii){setTimeout(function(){var f=mkFig({state:'outside',df:.48+Math.random()*.38});fadeIn(f);setTimeout(function(){setS(f,'aware');},120);},ii*45);})(i);}},
         ],
         conversion:[
           {id:'branding',label:'Branding',icon:'◇',type:'conversion',convEff:3,pulse:false,tags:['Trust','Conversion'],stat:'📊 Consistent branding increases revenue by 33%. People pay more from brands they recognise.',statType:'cs',head:"A forgettable brand loses clients before you say a word.",body:"Branding makes aware people trust you enough to buy. Without it, they choose the competitor who looks more established — even if your product is better. A strong identity signals quality and makes people feel confident paying your price.",
-           effect:function(){figs.filter(function(f){return f.state==='aware'||f.state==='outside';}).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*60);});setTimeout(function(){figs.filter(function(f){return f.state==='near';}).slice(0,5).forEach(function(f,i){setTimeout(function(){setS(f,'inside',false);burst(6,false);},300+i*280);});},1800);}},
+           effect:function(){figs.filter(function(f){return f.state==='aware'||f.state==='outside';}).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*22);});setTimeout(function(){figs.filter(function(f){return f.state==='near';}).slice(0,5).forEach(function(f,i){setTimeout(function(){setS(f,'inside',false);burst(6,false);},80+i*90);});},700);}},
           {id:'website',label:'Website / UX',icon:'⬡',type:'conversion',convEff:3,pulse:true,tags:['Conversion','Trust'],stat:'📊 Good UX converts 3-5% of visitors. Poor UX: under 0.5%. That gap is your lost revenue.',statType:'cs',head:"People find your site. Stay 8 seconds. Leave forever. Sale goes to a competitor.",body:"Your website is your best salesperson — it works 24 hours a day and never calls in sick. If it loads slowly, looks outdated or confuses visitors they leave and do not return. A conversion-focused website turns traffic into paying clients.",
-           effect:function(){figs.filter(function(f){return f.state==='aware'||f.state==='outside';}).slice(0,10).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*70);});setTimeout(function(){figs.filter(function(f){return f.state==='near';}).slice(0,7).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',false);burst(7,false);},400+i*60);},i*160);});circEl.setAttribute('stroke','rgba(212,175,55,0.6)');circEl.setAttribute('stroke-width',2);},2200);}},
+           effect:function(){figs.filter(function(f){return f.state==='aware'||f.state==='outside';}).slice(0,10).forEach(function(f,i){setTimeout(function(){setS(f,'near');},i*28);});setTimeout(function(){figs.filter(function(f){return f.state==='near';}).slice(0,7).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',false);burst(7,false);},120+i*25);},i*55);});circEl.setAttribute('stroke','rgba(212,175,55,0.6)');circEl.setAttribute('stroke-width',2);},850);}},
           {id:'funnel',label:'Sales Funnel',icon:'▽',type:'conversion',convEff:5,pulse:true,tags:['Conversion','Automated'],stat:'📊 Businesses with funnels generate 50% more sales at 33% lower cost.',statType:'cs',head:"You have traffic. But no system to convert it. Every visitor leaves and never buys.",body:"A funnel automatically guides a stranger through awareness, interest, decision and purchase — without you doing anything. It captures leads, builds trust, handles objections and closes sales. Without one you rely on luck. With one you have a predictable revenue machine.",
-           effect:function(){var toConv=figs.filter(function(f){return f.state==='edge'||f.state==='near';});if(toConv.length<8){for(var i=0;i<12;i++)mkFig({state:'edge',df:.12+Math.random()*.7});toConv=figs.filter(function(f){return f.state==='edge'||f.state==='near';});}toConv.slice(0,Math.ceil(toConv.length*.68)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',false);burst(8,true);},200+i*85);},i*45);});circEl.setAttribute('stroke','rgba(212,175,55,0.7)');circEl.setAttribute('stroke-width',2.2);}},
+           effect:function(){var toConv=figs.filter(function(f){return f.state==='edge'||f.state==='near';});if(toConv.length<8){for(var i=0;i<12;i++)mkFig({state:'edge',df:.12+Math.random()*.7});toConv=figs.filter(function(f){return f.state==='edge'||f.state==='near';});}toConv.slice(0,Math.ceil(toConv.length*.68)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',false);burst(8,true);},60+i*30);},i*18);});circEl.setAttribute('stroke','rgba(212,175,55,0.7)');circEl.setAttribute('stroke-width',2.2);}},
           {id:'email',label:'Email Marketing',icon:'✦',type:'conversion',convEff:4,pulse:true,tags:['Conversion','Re-engagement'],stat:'📊 Email returns $42 per $1 spent. Re-engages people you already lost.',statType:'cs',head:"People showed interest. You never followed up. They bought from someone who did.",body:"80% of sales need 5 or more follow-ups. Most businesses follow up zero times. Email marketing automates your entire sequence — re-engages cold leads, sends the right offer at the right time, and brings people back to buy. They enter as warm gold — re-engaged, not cold.",
-           effect:function(){var toConv=figs.filter(function(f){return f.state==='near'||f.state==='aware';});if(toConv.length<6){for(var i=0;i<10;i++)mkFig({state:'near',df:.15+Math.random()*.7});toConv=figs.filter(function(f){return f.state==='near';});}toConv.slice(0,Math.ceil(toConv.length*.55)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',true);burst(5,false);},350+i*130);},i*65);});}},
+           effect:function(){var toConv=figs.filter(function(f){return f.state==='near'||f.state==='aware';});if(toConv.length<6){for(var i=0;i<10;i++)mkFig({state:'near',df:.15+Math.random()*.7});toConv=figs.filter(function(f){return f.state==='near';});}toConv.slice(0,Math.ceil(toConv.length*.55)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');setTimeout(function(){setS(f,'inside',true);burst(5,false);},100+i*45);},i*25);});}},
           {id:'conv-opt',label:'Conversion Opt.',icon:'◈',type:'conversion',convEff:5,pulse:true,tags:['Conversion','Multiplier'],stat:'📊 1% to 3% conversion triples revenue with zero extra ad spend.',statType:'cs',head:"You are running ads, getting traffic, but only 1 in 100 buys.",body:"Conversion optimisation fixes the exact reasons people do not buy: confusing layout, weak CTAs, slow load, missing trust signals. You already paid to get them here. CRO makes that investment pay 2 to 5 times more. The highest ROI fix in marketing.",
-           effect:function(){var all=figs.filter(function(f){return f.state!=='inside';});all.slice(0,Math.ceil(all.length*.65)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');},i*20);});setTimeout(function(){figs.filter(function(f){return f.state==='edge';}).forEach(function(f,i){setTimeout(function(){setS(f,'inside',false);burst(10,true);},100+i*55);});circEl.setAttribute('stroke','rgba(212,175,55,0.82)');circEl.setAttribute('stroke-width',2.8);},700);}},
+           effect:function(){var all=figs.filter(function(f){return f.state!=='inside';});all.slice(0,Math.ceil(all.length*.65)).forEach(function(f,i){setTimeout(function(){setS(f,'edge');},i*8);});setTimeout(function(){figs.filter(function(f){return f.state==='edge';}).forEach(function(f,i){setTimeout(function(){setS(f,'inside',false);burst(10,true);},35+i*20);});circEl.setAttribute('stroke','rgba(212,175,55,0.82)');circEl.setAttribute('stroke-width',2.8);},260);}},
         ]
       };
 
-      function showEff(svc){
-        var lbl=document.getElementById('mv-eff-lbl'),dots=document.getElementById('mv-eff-dots');
-        dots.innerHTML='';
-        var isExp=svc.type==='exposure',eff=isExp?(svc.expEff||0):(svc.convEff||0);
-        if(!eff){lbl.textContent='';return;}
-        lbl.textContent=isExp?'Reach':'Conversion';lbl.style.color=isExp?'rgba(255,255,255,0.3)':'rgba(212,175,55,0.5)';
-        for(var i=0;i<5;i++){var dot=document.createElement('div');dot.className='mv-edot'+(i<eff?(isExp?' fe':' fc'):'');dots.appendChild(dot);}
-      }
+      function showEff(svc){ /* dots removed */ }
 
       function renderChips(){
         ['exp','conv'].forEach(function(k){
