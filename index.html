@@ -401,10 +401,13 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Tall wrapper on ALL devices — 280vh gives ~10s of scroll room */
+/* Tall wrapper — 500vh:
+   Phase 1 (0–45%) = video only, NO text (panther walks)
+   Phase 2 (45–55%) = text fades in over video
+   Phase 3 (55%+)   = text fully visible */
 #hero-scroll-wrap {
   position: relative;
-  height: 280vh;
+  height: 500vh;
 }
 
 .hero {
@@ -421,9 +424,13 @@ html, body {
   overflow: hidden !important;
 }
 
-/* Hero text fades as you scroll into the video */
-.hero-body, .scroll-hint {
-  transition: opacity 0.15s ease;
+/* Hero text hidden by default — JS reveals after 45% scroll */
+.hero-body {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.scroll-hint {
+  transition: opacity 0.2s ease;
 }
 
 main {
@@ -1385,10 +1392,12 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
       vid.currentTime = target;
     }
 
-    /* Fade hero text as scroll progresses */
-    var fade = progress < 0.1 ? 1 : Math.max(0, 1 - (progress - 0.1) / 0.15);
-    if (hbody) hbody.style.opacity = fade;
-    if (hint)  hint.style.opacity  = progress < 0.04 ? 1 : 0;
+    /* Phase 1 (0–45%): pure video, NO text (panther walks)
+       Phase 2 (45–55%): text fades in over video
+       Phase 3 (55%+):   text fully visible */
+    var textFade = Math.max(0, Math.min(1, (progress - 0.45) / 0.10));
+    if (hbody) hbody.style.opacity = textFade;
+    if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
   }
 
   function onScroll() {
