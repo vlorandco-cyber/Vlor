@@ -401,27 +401,28 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Tall wrapper — 500vh:
-   Phase 1 (0–45%) = video only, NO text (panther walks)
-   Phase 2 (45–55%) = text fades in over video
-   Phase 3 (55%+)   = text fully visible */
+/* ── HERO SCROLL ZONE ─────────────────────────────────
+   JS will fix .hero to the viewport while scrolling through
+   this 500vh zone. No CSS sticky needed.
+──────────────────────────────────────────────────── */
 #hero-scroll-wrap {
   position: relative;
   height: 500vh;
 }
 
+/* Hero starts absolute; JS switches it to fixed while in zone */
 .hero {
-  position: sticky !important;
+  position: absolute !important;
   top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
   height: 100vh !important;
   height: 100svh !important;
-  max-height: 100vh !important;
-  max-height: 100svh !important;
-  min-height: unset !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-end !important;
   overflow: hidden !important;
+  will-change: transform;
 }
 
 /* Hero text hidden by default — JS reveals after 45% scroll */
@@ -435,8 +436,6 @@ html, body {
 
 main {
   display: block !important;
-  /* overflow must NOT be hidden — it breaks position:sticky on the hero */
-  overflow: clip !important; /* 'clip' prevents overflow WITHOUT breaking sticky */
 }
 
 
@@ -1348,122 +1347,121 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 </script>
 
 <script>
-/* ── HERO VIDEO SCROLL SCRUB v3 — reliable on iOS + desktop ── */
+/* ── HERO SCROLL + VIDEO SCRUB — fixed-position approach ──
+   Works on all hosts including GitHub Pages.
+   No CSS sticky needed — JS manually fixes the hero.
+──────────────────────────────────────────────────────── */
 (function(){
   var vid   = document.getElementById('hero-vid');
   var wrap  = document.getElementById('hero-scroll-wrap');
+  var hero  = wrap && wrap.querySelector('.hero');
   var hbody = document.querySelector('.hero-body');
   var hint  = document.querySelector('.scroll-hint');
-  if (!vid || !wrap) return;
+  if (!vid || !wrap || !hero) return;
 
-  /* Force correct video attributes */
+  /* Video setup */
   vid.muted    = true;
   vid.loop     = false;
   vid.autoplay = false;
 
-  var duration  = 0;
-  var unlocked  = false;
-  var ticking   = false;
-  var lastTime  = -1;
-  var initDone  = false;
+  var duration = 0;
+  var unlocked = false;
+  var ticking  = false;
 
-  /* ── iOS UNLOCK ──────────────────────────────────────────
-     iOS Safari BLOCKS currentTime changes until the user
-     has triggered a play() call. We play then immediately
-     pause on the very first touch/click/scroll.
-  ─────────────────────────────────────────────────────── */
+  /* ── iOS UNLOCK ─────────────────────────────────────────
+     iOS blocks currentTime changes until play() is called
+     after a user gesture. Unlock on any first interaction.
+  ──────────────────────────────────────────────────────── */
   function unlock() {
     if (unlocked) return;
     unlocked = true;
     var p = vid.play();
     if (p && p.then) {
-      p.then(function() {
-        vid.pause();
-        vid.currentTime = 0;
-        /* Now that it's unlocked, force a scrub immediately */
-        scrub();
-      }).catch(function() { scrub(); });
+      p.then(function() { vid.pause(); vid.currentTime = 0; update(); })
+       .catch(function() { update(); });
     } else {
-      vid.pause();
-      vid.currentTime = 0;
-      scrub();
+      vid.pause(); vid.currentTime = 0; update();
     }
   }
-
-  /* Listen on every possible first interaction */
-  ['touchstart','touchmove','pointerdown','click','mousedown'].forEach(function(e) {
-    document.addEventListener(e, function u() {
-      unlock();
-      document.removeEventListener(e, u);
-    }, { once: true, passive: true });
+  ['touchstart','touchmove','pointerdown','mousedown','click'].forEach(function(e) {
+    document.addEventListener(e, unlock, { once: true, passive: true });
   });
-  window.addEventListener('scroll', function u() {
-    unlock();
-    window.removeEventListener('scroll', u, { passive: true });
-  }, { passive: true });
+  window.addEventListener('scroll', unlock, { once: true, passive: true });
 
-  /* ── SCRUB ──────────────────────────────────────────────
-     Maps scroll progress → video currentTime + text fade
-  ─────────────────────────────────────────────────────── */
-  function scrub() {
+  /* ── POSITION + SCRUB UPDATE ────────────────────────────
+     Called on every scroll/resize frame.
+     Fixes hero to viewport while inside the scroll zone.
+  ──────────────────────────────────────────────────────── */
+  function update() {
     ticking = false;
-    if (!duration) return;
 
-    var wrapTop    = wrap.getBoundingClientRect().top;
-    var scrollable = wrap.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
+    var scrollY    = window.pageYOffset || document.documentElement.scrollTop;
+    var wrapTop    = wrap.offsetTop;
+    var wrapH      = wrap.offsetHeight;
+    var vh         = window.innerHeight;
+    var scrollable = wrapH - vh;
 
-    var progress = Math.max(0, Math.min(1, -wrapTop / scrollable));
-    var target   = progress * duration;
+    /* Clamp progress 0→1 through the scroll zone */
+    var progress = (scrollY - wrapTop) / scrollable;
+    progress = Math.max(0, Math.min(1, progress));
 
-    /* Update video frame — use a threshold to avoid spamming the decoder */
-    if (Math.abs(target - lastTime) > 0.025) {
-      lastTime = target;
-      vid.currentTime = target;
+    /* ── Position hero ── */
+    if (scrollY < wrapTop) {
+      /* Above the zone — hero sits at top of wrap */
+      hero.style.position = 'absolute';
+      hero.style.top      = '0px';
+    } else if (scrollY > wrapTop + scrollable) {
+      /* Below the zone — hero sits at bottom of wrap */
+      hero.style.position = 'absolute';
+      hero.style.top      = scrollable + 'px';
+    } else {
+      /* Inside the zone — fix hero to viewport */
+      hero.style.position = 'fixed';
+      hero.style.top      = '0px';
     }
 
-    /* Text reveal:
-       0–45%  → completely hidden (video only)
-       45–55% → fades in
-       55%+   → fully visible                 */
+    /* ── Scrub video ── */
+    if (duration) {
+      var target = progress * duration;
+      if (Math.abs(vid.currentTime - target) > 0.025) {
+        vid.currentTime = target;
+      }
+    }
+
+    /* ── Text reveal ──
+       0–45%  : no text (video only)
+       45–55% : text fades in over video
+       55%+   : text fully visible          */
     var textOpacity = Math.max(0, Math.min(1, (progress - 0.45) / 0.10));
     if (hbody) hbody.style.opacity = textOpacity;
     if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
   }
 
   function onScroll() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(scrub);
-    }
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }
 
-  /* ── INIT ───────────────────────────────────────────── */
+  /* ── INIT ─────────────────────────────────────────────── */
+  var ready = false;
   function init() {
-    if (initDone) return;
+    if (ready) return;
     duration = vid.duration || 0;
     if (!duration) return;
-    initDone = true;
+    ready = true;
     window.addEventListener('scroll', onScroll, { passive: true });
-    /* Set frame 0 immediately */
-    vid.currentTime = 0;
-    scrub();
+    window.addEventListener('resize', update);
+    update();
   }
 
   vid.addEventListener('loadedmetadata', init);
-  vid.addEventListener('canplaythrough',  init);
-  vid.addEventListener('canplay',         init);
+  vid.addEventListener('canplay',        init);
+  vid.addEventListener('canplaythrough', init);
+  if (vid.readyState >= 1 && vid.duration) init();
 
-  /* If already loaded (cached) */
-  if (vid.readyState >= 2) init();
-
-  /* Fallback: keep retrying until duration is known */
-  var retryTimer = setInterval(function() {
-    if (vid.duration && !initDone) {
-      clearInterval(retryTimer);
-      init();
-    }
-  }, 200);
+  /* Retry until duration is available (handles cached videos) */
+  var t = setInterval(function() {
+    if (vid.duration) { clearInterval(t); init(); }
+  }, 300);
 
 })();
 </script>
