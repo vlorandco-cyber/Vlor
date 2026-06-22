@@ -729,8 +729,7 @@ nav#nav,
 <main>
 <!-- HERO -->
   <section class="hero">
-    <div class="hero-img-d" id="hd"></div>
-    <div class="hero-img-m"></div>
+    <video id="hero-vid" src="hero-bg.mp4" muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;"></video>
     <div class="hero-ov"></div>
     <div class="hero-tf"></div>
     <div class="hero-body">
@@ -1298,7 +1297,7 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
     el.addEventListener('mouseleave',function(){c.style.width='14px';c.style.height='14px';r.style.width='48px';r.style.height='48px';});
   });
 }
-var hd=document.getElementById('hd');if(hd)setTimeout(function(){hd.classList.add('z');},80);
+
 })();
 
 // Touch cursor for mobile
@@ -1325,5 +1324,45 @@ var hd=document.getElementById('hd');if(hd)setTimeout(function(){hd.classList.ad
 })();
 
 </script>
+
+<script>
+(function(){
+  var vid = document.getElementById('hero-vid');
+  if (!vid) return;
+
+  // Wait for metadata so we know the duration
+  function initScrub() {
+    if (!vid.duration) return;
+
+    var hero = document.querySelector('.hero');
+    var ticking = false;
+
+    function scrub() {
+      // Scrub over the full height of the hero section
+      var heroH   = hero.offsetHeight;
+      var scrollY = window.scrollY;
+      // Clamp 0–heroH
+      var progress = Math.min(Math.max(scrollY / heroH, 0), 1);
+      vid.currentTime = progress * vid.duration;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function(){
+      if (!ticking) {
+        requestAnimationFrame(scrub);
+        ticking = true;
+      }
+    }, {passive: true});
+
+    // Set initial frame
+    vid.currentTime = 0;
+  }
+
+  vid.addEventListener('loadedmetadata', initScrub);
+  // In case metadata already loaded
+  if (vid.readyState >= 1) initScrub();
+})();
+</script>
+
 </body>
 </html>
