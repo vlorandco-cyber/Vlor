@@ -435,7 +435,8 @@ html, body {
 
 main {
   display: block !important;
-  overflow: hidden !important;
+  /* overflow must NOT be hidden — it breaks position:sticky on the hero */
+  overflow: clip !important; /* 'clip' prevents overflow WITHOUT breaking sticky */
 }
 
 
