@@ -420,7 +420,7 @@ body {
 /* 4500px of scroll space = ~10 second feel */
 #hero-scroll-wrap {
   position: relative  !important;
-  height: 5000px      !important; /* faster panther pace */
+  height: 7000px      !important; /* more dwell time between texts */
 }
 
 /* Hero sticks while scroll-wrap scrolls past */
@@ -1379,11 +1379,11 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   var vid   = document.getElementById('hero-vid');
   /* Staggered text — each element reveals at its own scroll threshold */
   var textEls = [
-    { el: document.getElementById('ht1'), from: 0.50, to: 0.56 },
-    { el: document.getElementById('ht2'), from: 0.62, to: 0.68 },
-    { el: document.getElementById('ht3'), from: 0.74, to: 0.80 },
-    { el: document.getElementById('ht4'), from: 0.86, to: 0.92 },
-    { el: document.getElementById('ht5'), from: 0.94, to: 1.00 }
+    { el: document.getElementById('ht1'), from: 0.42, to: 0.48 }, /* ~2940px in */
+    { el: document.getElementById('ht2'), from: 0.57, to: 0.63 }, /* ~1050px later */
+    { el: document.getElementById('ht3'), from: 0.70, to: 0.76 }, /* ~910px later  */
+    { el: document.getElementById('ht4'), from: 0.82, to: 0.88 }, /* ~840px later  */
+    { el: document.getElementById('ht5'), from: 0.92, to: 0.98 }  /* ~700px later  */
   ];
   var hint  = document.querySelector('.scroll-hint');
 
