@@ -402,36 +402,34 @@ html, body {
 }
 
 /* ── HERO SCROLL ZONE ─────────────────────────────────
-   JS will fix .hero to the viewport while scrolling through
-   this 500vh zone. No CSS sticky needed.
+   GSAP ScrollTrigger handles pinning the hero.
+   We just set it to a normal full-screen section.
 ──────────────────────────────────────────────────── */
 #hero-scroll-wrap {
-  position: relative;
-  height: 500vh;
+  /* Container only — GSAP adds scroll space automatically */
 }
 
-/* Hero starts absolute; JS switches it to fixed while in zone */
 .hero {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  position: relative !important;
   width: 100% !important;
   height: 100vh !important;
   height: 100svh !important;
+  min-height: unset !important;
+  max-height: unset !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-end !important;
   overflow: hidden !important;
-  will-change: transform;
 }
 
-/* Hero text hidden by default — JS reveals after 45% scroll */
+/* Hero text hidden by default — GSAP reveals it on scroll */
 .hero-body {
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s ease;
 }
 .scroll-hint {
-  transition: opacity 0.2s ease;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 main {
@@ -714,6 +712,9 @@ nav#nav,
 }
 </script>
 <!-- ──────────────────────────────────────────────────────────── -->
+<!-- GSAP + ScrollTrigger for scroll-scrubbed video -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body data-page="home">
 <div id="cur"></div>
@@ -1347,121 +1348,129 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 </script>
 
 <script>
-/* ── HERO SCROLL + VIDEO SCRUB — fixed-position approach ──
-   Works on all hosts including GitHub Pages.
-   No CSS sticky needed — JS manually fixes the hero.
-──────────────────────────────────────────────────────── */
-(function(){
+/* ══════════════════════════════════════════════════════════════
+   HERO SCROLL-SCRUBBED VIDEO  —  GSAP ScrollTrigger
+   ─────────────────────────────────────────────────────────────
+   • Video is pinned full-screen while user scrolls ~4000px
+   • Scroll progress (0→1) maps directly to video.currentTime
+   • Scrub:1 gives silky smooth forward + backward playback
+   • Text fades in at 45% progress, over the video
+   • After 100% the pin releases and page continues normally
+══════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
   var vid   = document.getElementById('hero-vid');
-  var wrap  = document.getElementById('hero-scroll-wrap');
-  var hero  = wrap && wrap.querySelector('.hero');
   var hbody = document.querySelector('.hero-body');
   var hint  = document.querySelector('.scroll-hint');
-  if (!vid || !wrap || !hero) return;
 
-  /* Video setup */
+  if (!vid) return;
+
+  /* ── Video setup ─────────────────────────────────────────── */
   vid.muted    = true;
   vid.loop     = false;
   vid.autoplay = false;
+  vid.preload  = 'auto';
 
-  var duration = 0;
+  /* ── iOS Safari unlock ───────────────────────────────────────
+     iOS blocks .currentTime changes until play() is called
+     once after a user gesture. We trigger this silently.     */
   var unlocked = false;
-  var ticking  = false;
-
-  /* ── iOS UNLOCK ─────────────────────────────────────────
-     iOS blocks currentTime changes until play() is called
-     after a user gesture. Unlock on any first interaction.
-  ──────────────────────────────────────────────────────── */
   function unlock() {
     if (unlocked) return;
     unlocked = true;
     var p = vid.play();
     if (p && p.then) {
-      p.then(function() { vid.pause(); vid.currentTime = 0; update(); })
-       .catch(function() { update(); });
+      p.then(function () {
+        vid.pause();
+        vid.currentTime = 0;
+      }).catch(function () {});
     } else {
-      vid.pause(); vid.currentTime = 0; update();
+      vid.pause();
+      vid.currentTime = 0;
     }
   }
-  ['touchstart','touchmove','pointerdown','mousedown','click'].forEach(function(e) {
+  ['touchstart', 'pointerdown', 'mousedown', 'click'].forEach(function (e) {
     document.addEventListener(e, unlock, { once: true, passive: true });
   });
+  /* Also unlock on first scroll — covers most cases */
   window.addEventListener('scroll', unlock, { once: true, passive: true });
 
-  /* ── POSITION + SCRUB UPDATE ────────────────────────────
-     Called on every scroll/resize frame.
-     Fixes hero to viewport while inside the scroll zone.
-  ──────────────────────────────────────────────────────── */
-  function update() {
-    ticking = false;
+  /* ── GSAP ScrollTrigger init ─────────────────────────────── */
+  function initGSAP() {
+    var duration = vid.duration;
+    if (!duration || duration === Infinity) return;
 
-    var scrollY    = window.pageYOffset || document.documentElement.scrollTop;
-    var wrapTop    = wrap.offsetTop;
-    var wrapH      = wrap.offsetHeight;
-    var vh         = window.innerHeight;
-    var scrollable = wrapH - vh;
+    gsap.registerPlugin(ScrollTrigger);
 
-    /* Clamp progress 0→1 through the scroll zone */
-    var progress = (scrollY - wrapTop) / scrollable;
-    progress = Math.max(0, Math.min(1, progress));
+    /* Proxy object: GSAP tweens 'time' from 0 → duration */
+    var proxy = { time: 0 };
 
-    /* ── Position hero ── */
-    if (scrollY < wrapTop) {
-      /* Above the zone — hero sits at top of wrap */
-      hero.style.position = 'absolute';
-      hero.style.top      = '0px';
-    } else if (scrollY > wrapTop + scrollable) {
-      /* Below the zone — hero sits at bottom of wrap */
-      hero.style.position = 'absolute';
-      hero.style.top      = scrollable + 'px';
-    } else {
-      /* Inside the zone — fix hero to viewport */
-      hero.style.position = 'fixed';
-      hero.style.top      = '0px';
-    }
+    ScrollTrigger.create({
+      trigger : '.hero',   /* The full-screen hero section   */
+      pin     : true,      /* GSAP pins it while scrolling   */
+      start   : 'top top', /* Pin starts when hero hits top  */
+      end     : '+=4500',  /* 4500px of scroll ≈ 10s feeling */
+      scrub   : 1.2,       /* 1.2s lag = buttery smooth      */
+      anticipatePin: 1,    /* Avoids flicker on pin start    */
 
-    /* ── Scrub video ── */
-    if (duration) {
-      var target = progress * duration;
-      if (Math.abs(vid.currentTime - target) > 0.025) {
-        vid.currentTime = target;
+      onUpdate: function (self) {
+        var t = self.progress * duration;
+
+        /* ── Scrub video ────────────────────────────────────
+           Only seek if difference > 1 frame (≈33ms at 30fps)
+           Avoids hammering the decoder unnecessarily.       */
+        if (Math.abs(vid.currentTime - t) > 0.033) {
+          vid.currentTime = t;
+        }
+
+        /* ── Text reveal ────────────────────────────────────
+           0–45%  → pure video, no text
+           45–55% → hero text fades in over video
+           55%+   → text stays fully visible               */
+        var textOpacity = Math.max(0, Math.min(1, (self.progress - 0.45) / 0.10));
+        if (hbody) hbody.style.opacity = textOpacity;
+
+        /* Scroll hint hides after first 3% */
+        if (hint) hint.style.opacity = self.progress < 0.03 ? 1 : 0;
+      },
+
+      onLeave: function () {
+        /* Ensure text stays visible after pin releases */
+        if (hbody) hbody.style.opacity = 1;
+      },
+
+      onEnterBack: function () {
+        /* Re-hide text if user scrolls back into zone at 0% */
+        if (hbody) hbody.style.opacity = 0;
       }
-    }
+    });
 
-    /* ── Text reveal ──
-       0–45%  : no text (video only)
-       45–55% : text fades in over video
-       55%+   : text fully visible          */
-    var textOpacity = Math.max(0, Math.min(1, (progress - 0.45) / 0.10));
-    if (hbody) hbody.style.opacity = textOpacity;
-    if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
+    console.log('[Vlore] Hero ScrollTrigger ready — duration:', duration.toFixed(2) + 's');
   }
 
-  function onScroll() {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }
-
-  /* ── INIT ─────────────────────────────────────────────── */
+  /* ── Wait for video metadata ─────────────────────────────── */
   var ready = false;
-  function init() {
+  function tryInit() {
     if (ready) return;
-    duration = vid.duration || 0;
-    if (!duration) return;
+    if (!vid.duration || vid.duration === Infinity) return;
     ready = true;
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    initGSAP();
   }
 
-  vid.addEventListener('loadedmetadata', init);
-  vid.addEventListener('canplay',        init);
-  vid.addEventListener('canplaythrough', init);
-  if (vid.readyState >= 1 && vid.duration) init();
+  vid.addEventListener('loadedmetadata', tryInit);
+  vid.addEventListener('canplay',        tryInit);
+  vid.addEventListener('canplaythrough', tryInit);
+  if (vid.readyState >= 1) tryInit();
 
-  /* Retry until duration is available (handles cached videos) */
-  var t = setInterval(function() {
-    if (vid.duration) { clearInterval(t); init(); }
-  }, 300);
+  /* Fallback retry — handles cached/preloaded videos */
+  var retryTimer = setInterval(function () {
+    tryInit();
+    if (ready) clearInterval(retryTimer);
+  }, 250);
+
+  /* Stop retrying after 10 seconds */
+  setTimeout(function () { clearInterval(retryTimer); }, 10000);
 
 })();
 </script>
