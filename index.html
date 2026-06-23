@@ -420,7 +420,7 @@ body {
 /* 4500px of scroll space = ~10 second feel */
 #hero-scroll-wrap {
   position: relative  !important;
-  height: 4500px      !important;
+  height: 8000px      !important; /* ~15s of scrolling */
 }
 
 /* Hero sticks while scroll-wrap scrolls past */
@@ -1392,22 +1392,31 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   /* ── iOS Safari unlock ───────────────────────────────────────
      Must call play() after first user gesture so currentTime
      can be set freely afterwards on iOS.                      */
+  /* Unlock immediately on load — muted videos can autoplay on iOS without
+     a user gesture. This shows the first frame right away (no black screen)
+     and also unlocks currentTime seeking for scroll scrubbing.             */
   var unlocked = false;
   function unlock() {
     if (unlocked) return;
     unlocked = true;
     var p = vid.play();
     if (p && p.then) {
-      p.then(function () { vid.pause(); vid.currentTime = 0; })
-       .catch(function () {});
+      p.then(function () { vid.pause(); vid.currentTime = 0; update(); })
+       .catch(function () { /* fallback: still try seeking */ update(); });
     } else {
-      vid.pause(); vid.currentTime = 0;
+      vid.pause(); vid.currentTime = 0; update();
     }
   }
+  /* Try immediately on load — works for muted video on all browsers */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', unlock);
+  } else {
+    unlock();
+  }
+  /* Backup: also unlock on first interaction in case autoplay is blocked */
   ['touchstart','pointerdown','mousedown','click'].forEach(function (e) {
     document.addEventListener(e, unlock, { once: true, passive: true });
   });
-  window.addEventListener('scroll', unlock, { once: true, passive: true });
 
   /* ── Core update function ───────────────────────────────────
      Runs on every scroll frame.
