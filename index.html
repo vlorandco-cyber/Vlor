@@ -438,10 +438,8 @@ body {
 }
 
 /* Text hidden — JS fades in at 45% scroll progress */
-.hero-body {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
+/* hero-body visible — individual children control their own opacity */
+.hero-body { opacity: 1; }
 .scroll-hint {
   opacity: 1;
   transition: opacity 0.3s ease;
@@ -769,12 +767,13 @@ nav#nav,
     <div class="hero-ov"></div>
     <div class="hero-tf"></div>
     <div class="hero-body">
-      <h1 class="hero-h rv d1">
-        Generate revenue.<br/>Scale your business.<br/>
-        <em class="gold">Dominate your market.</em>
+      <h1 class="hero-h" style="margin-bottom:22px;">
+        <span id="ht1" style="display:block;opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease;">Generate revenue.</span>
+        <span id="ht2" style="display:block;opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease;">Scale your business.</span>
+        <em   id="ht3" class="gold" style="display:block;opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease;">Dominate your market.</em>
       </h1>
-      <p class="hero-sub rv d2">We build and execute full-scale marketing systems that drive qualified leads, increase conversion rates, and grow your bottom line, predictably and at scale.</p>
-      <div class="hero-ctas rv d3">
+      <p id="ht4" class="hero-sub" style="opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease;">We build and execute full-scale marketing systems that drive qualified leads, increase conversion rates, and grow your bottom line, predictably and at scale.</p>
+      <div id="ht5" class="hero-ctas" style="opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease;">
         <a href="/book" class="btn btn-gold">Book a Consultation</a>
         <a href="/services" class="btn btn-dim">See How It Works</a>
       </div>
@@ -1378,7 +1377,14 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   var pin   = document.getElementById('hero-pin');
   var wrap  = document.getElementById('hero-scroll-wrap');
   var vid   = document.getElementById('hero-vid');
-  var hbody = document.querySelector('.hero-body');
+  /* Staggered text — each element reveals at its own scroll threshold */
+  var textEls = [
+    { el: document.getElementById('ht1'), from: 0.52, to: 0.58 },
+    { el: document.getElementById('ht2'), from: 0.60, to: 0.66 },
+    { el: document.getElementById('ht3'), from: 0.68, to: 0.74 },
+    { el: document.getElementById('ht4'), from: 0.76, to: 0.82 },
+    { el: document.getElementById('ht5'), from: 0.84, to: 0.90 }
+  ];
   var hint  = document.querySelector('.scroll-hint');
 
   if (!pin || !wrap || !vid) return;
@@ -1471,8 +1477,13 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
        0–45%  = pure video, no text
        45–55% = hero text fades in over video
        55%+   = text fully visible                           */
-    var textOpacity = Math.max(0, Math.min(1, (progress - 0.55) / 0.08));
-    if (hbody) hbody.style.opacity = textOpacity;
+    /* Stagger each text element in sequence */
+    textEls.forEach(function(item) {
+      if (!item.el) return;
+      var op = Math.max(0, Math.min(1, (progress - item.from) / (item.to - item.from)));
+      item.el.style.opacity   = op;
+      item.el.style.transform = op < 1 ? 'translateY(' + Math.round((1 - op) * 20) + 'px)' : 'translateY(0)';
+    });
     if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
   }
 
