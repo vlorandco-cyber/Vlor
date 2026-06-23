@@ -763,7 +763,7 @@ nav#nav,
 <main>
 <!-- HERO -->
 <div id="hero-scroll-wrap">
-<div id="hero-pin" style="position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;z-index:2;">
+<div id="hero-pin" style="position:fixed;top:0;left:0;width:100%;height:100vh;height:100svh;overflow:hidden;z-index:5;">
   <section class="hero">
     <video id="hero-vid" src="hero-bg.mp4" muted playsinline webkit-playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;"></video>
     <div class="hero-ov"></div>
@@ -1365,22 +1365,23 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   HERO VIDEO SCROLL SCRUB  —  Pure JS, no libraries
+   HERO VIDEO — FIXED PIN + SCROLL SCRUB
    ─────────────────────────────────────────────────────────────
-   • CSS sticky keeps .hero pinned (no GSAP conflict)
-   • Scroll progress → video.currentTime
-   • iOS Safari unlock built in
-   • Text fades in at 45% progress
+   #hero-pin        = position:fixed — ALWAYS stays on screen
+   #hero-scroll-wrap= 4500px tall — creates the scroll space
+   JS controls      = show/hide pin + scrub video + text reveal
+   This bypasses all CSS sticky/overflow conflicts entirely.
 ══════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  var vid   = document.getElementById('hero-vid');
+  var pin   = document.getElementById('hero-pin');
   var wrap  = document.getElementById('hero-scroll-wrap');
+  var vid   = document.getElementById('hero-vid');
   var hbody = document.querySelector('.hero-body');
   var hint  = document.querySelector('.scroll-hint');
 
-  if (!vid || !wrap) return;
+  if (!pin || !wrap || !vid) return;
 
   /* ── Video setup ─────────────────────────────────────────── */
   vid.muted    = true;
@@ -1389,42 +1390,63 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   vid.preload  = 'auto';
 
   /* ── iOS Safari unlock ───────────────────────────────────────
-     iOS blocks .currentTime until play() is called after
-     a user gesture. We call play→pause silently on first touch. */
+     Must call play() after first user gesture so currentTime
+     can be set freely afterwards on iOS.                      */
   var unlocked = false;
   function unlock() {
     if (unlocked) return;
     unlocked = true;
     var p = vid.play();
     if (p && p.then) {
-      p.then(function () {
-        vid.pause();
-        vid.currentTime = 0;
-      }).catch(function () {});
+      p.then(function () { vid.pause(); vid.currentTime = 0; })
+       .catch(function () {});
     } else {
-      vid.pause();
-      vid.currentTime = 0;
+      vid.pause(); vid.currentTime = 0;
     }
   }
-  ['touchstart', 'pointerdown', 'mousedown', 'click'].forEach(function (e) {
+  ['touchstart','pointerdown','mousedown','click'].forEach(function (e) {
     document.addEventListener(e, unlock, { once: true, passive: true });
   });
   window.addEventListener('scroll', unlock, { once: true, passive: true });
 
-  /* ── Scroll → video scrub ───────────────────────────────────
-     Progress = how far we've scrolled through the 4500px zone.
-     0 = top of wrap at viewport top
-     1 = bottom of wrap at viewport bottom (hero unpins)         */
+  /* ── Core update function ───────────────────────────────────
+     Runs on every scroll frame.
+     - Calculates progress 0→1 through the 4500px zone
+     - Shows / hides the fixed pin accordingly
+     - Scrubs video.currentTime
+     - Fades in hero text at 45%                             */
   var ticking = false;
 
   function update() {
     ticking = false;
 
-    var wrapTop  = wrap.getBoundingClientRect().top;
-    var scrollable = wrap.offsetHeight - window.innerHeight;
-    var progress   = Math.max(0, Math.min(1, -wrapTop / scrollable));
+    var scrollY    = window.pageYOffset || document.documentElement.scrollTop;
+    var wrapTop    = wrap.offsetTop;                 /* usually 0   */
+    var wrapH      = wrap.offsetHeight;              /* 4500px      */
+    var vh         = window.innerHeight;
+    var scrollable = wrapH - vh;                     /* 4500 - vh   */
 
-    /* Scrub video — only if ready & meaningful change */
+    /* ── Visibility ──────────────────────────────────────────
+       Show the pin while user is inside the scroll zone.
+       Hide it completely once they've scrolled past.        */
+    var inZone = scrollY >= wrapTop && scrollY <= wrapTop + scrollable;
+    var before  = scrollY < wrapTop;
+
+    if (before || inZone) {
+      pin.style.display  = 'block';
+      pin.style.opacity  = '1';
+    } else {
+      /* Past the zone — fade out then hide */
+      pin.style.opacity  = '0';
+      pin.style.display  = 'none';
+    }
+
+    /* ── Progress 0→1 ───────────────────────────────────────── */
+    var progress = scrollable > 0
+      ? Math.max(0, Math.min(1, (scrollY - wrapTop) / scrollable))
+      : 0;
+
+    /* ── Scrub video ─────────────────────────────────────────── */
     if (vid.duration && vid.readyState >= 2) {
       var target = progress * vid.duration;
       if (Math.abs(vid.currentTime - target) > 0.025) {
@@ -1432,10 +1454,10 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
       }
     }
 
-    /* Text reveal:
-       0–45%  → no text (pure video)
-       45–55% → fades in
-       55%+   → fully visible            */
+    /* ── Text reveal ─────────────────────────────────────────
+       0–45%  = pure video, no text
+       45–55% = hero text fades in over video
+       55%+   = text fully visible                           */
     var textOpacity = Math.max(0, Math.min(1, (progress - 0.45) / 0.10));
     if (hbody) hbody.style.opacity = textOpacity;
     if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
@@ -1447,16 +1469,18 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 
   window.addEventListener('resize', update);
 
-  /* ── Wait for video metadata ─────────────────────────────── */
+  /* ── Wait for video to be ready ──────────────────────────── */
   vid.addEventListener('loadedmetadata', update);
   vid.addEventListener('canplay',        update);
   if (vid.readyState >= 1) update();
 
-  /* Retry for cached videos that already have metadata */
   var timer = setInterval(function () {
     if (vid.duration) { clearInterval(timer); update(); }
   }, 300);
   setTimeout(function () { clearInterval(timer); }, 10000);
+
+  /* Initial paint */
+  update();
 
 })();
 </script>
