@@ -396,33 +396,51 @@ nav {
 
 
 /* ── HERO SCROLL SCRUB ── */
-html, body {
-  height: 100%;
+/* height:auto so sticky works — NOT 100% */
+
+/* ════════════════════════════════════════════════════
+   HERO SCROLL-SCRUBBED VIDEO  —  CSS STICKY + PURE JS
+   ─────────────────────────────────────────────────────
+   #hero-scroll-wrap  =  4500px tall (the scroll space)
+   .hero              =  position:sticky, sticks to top
+   JS                 =  maps scroll→video.currentTime
+   NO GSAP            =  avoids conflict with sticky
+════════════════════════════════════════════════════ */
+
+/* html + body must be height:auto — height:100% kills sticky */
+html {
+  height: auto !important;
+  overflow-x: hidden;
+}
+body {
+  height: auto !important;
   overflow-x: hidden;
 }
 
-/* ── HERO SCROLL ZONE ─────────────────────────────────
-   GSAP ScrollTrigger handles pinning the hero.
-   We just set it to a normal full-screen section.
-──────────────────────────────────────────────────── */
+/* 4500px of scroll space = ~10 second feel */
 #hero-scroll-wrap {
-  /* Container only — GSAP adds scroll space automatically */
+  position: relative  !important;
+  height: 4500px      !important;
 }
 
+/* Hero sticks while scroll-wrap scrolls past */
 .hero {
-  position: relative !important;
-  width: 100% !important;
-  height: 100vh !important;
-  height: 100svh !important;
-  min-height: unset !important;
-  max-height: unset !important;
-  display: flex !important;
+  position: sticky    !important;
+  top: 0              !important;
+  left: 0             !important;
+  width: 100%         !important;
+  height: 100vh       !important;
+  height: 100svh      !important;
+  min-height: unset   !important;
+  max-height: unset   !important;
+  display: flex       !important;
   flex-direction: column !important;
   justify-content: flex-end !important;
-  overflow: hidden !important;
+  overflow: hidden    !important;
+  z-index: 2          !important;
 }
 
-/* Hero text hidden by default — GSAP reveals it on scroll */
+/* Text hidden — JS fades in at 45% scroll progress */
 .hero-body {
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -432,8 +450,10 @@ html, body {
   transition: opacity 0.3s ease;
 }
 
+/* main must NOT have overflow:hidden — kills sticky */
 main {
   display: block !important;
+  overflow: visible !important;
 }
 
 
@@ -712,9 +732,6 @@ nav#nav,
 }
 </script>
 <!-- ──────────────────────────────────────────────────────────── -->
-<!-- GSAP + ScrollTrigger for scroll-scrubbed video -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body data-page="home">
 <div id="cur"></div>
@@ -1349,22 +1366,22 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   HERO SCROLL-SCRUBBED VIDEO  —  GSAP ScrollTrigger
+   HERO VIDEO SCROLL SCRUB  —  Pure JS, no libraries
    ─────────────────────────────────────────────────────────────
-   • Video is pinned full-screen while user scrolls ~4000px
-   • Scroll progress (0→1) maps directly to video.currentTime
-   • Scrub:1 gives silky smooth forward + backward playback
-   • Text fades in at 45% progress, over the video
-   • After 100% the pin releases and page continues normally
+   • CSS sticky keeps .hero pinned (no GSAP conflict)
+   • Scroll progress → video.currentTime
+   • iOS Safari unlock built in
+   • Text fades in at 45% progress
 ══════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
   var vid   = document.getElementById('hero-vid');
+  var wrap  = document.getElementById('hero-scroll-wrap');
   var hbody = document.querySelector('.hero-body');
   var hint  = document.querySelector('.scroll-hint');
 
-  if (!vid) return;
+  if (!vid || !wrap) return;
 
   /* ── Video setup ─────────────────────────────────────────── */
   vid.muted    = true;
@@ -1373,8 +1390,8 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   vid.preload  = 'auto';
 
   /* ── iOS Safari unlock ───────────────────────────────────────
-     iOS blocks .currentTime changes until play() is called
-     once after a user gesture. We trigger this silently.     */
+     iOS blocks .currentTime until play() is called after
+     a user gesture. We call play→pause silently on first touch. */
   var unlocked = false;
   function unlock() {
     if (unlocked) return;
@@ -1393,84 +1410,54 @@ if(c&&r&&window.matchMedia('(pointer:fine)').matches){
   ['touchstart', 'pointerdown', 'mousedown', 'click'].forEach(function (e) {
     document.addEventListener(e, unlock, { once: true, passive: true });
   });
-  /* Also unlock on first scroll — covers most cases */
   window.addEventListener('scroll', unlock, { once: true, passive: true });
 
-  /* ── GSAP ScrollTrigger init ─────────────────────────────── */
-  function initGSAP() {
-    var duration = vid.duration;
-    if (!duration || duration === Infinity) return;
+  /* ── Scroll → video scrub ───────────────────────────────────
+     Progress = how far we've scrolled through the 4500px zone.
+     0 = top of wrap at viewport top
+     1 = bottom of wrap at viewport bottom (hero unpins)         */
+  var ticking = false;
 
-    gsap.registerPlugin(ScrollTrigger);
+  function update() {
+    ticking = false;
 
-    /* Proxy object: GSAP tweens 'time' from 0 → duration */
-    var proxy = { time: 0 };
+    var wrapTop  = wrap.getBoundingClientRect().top;
+    var scrollable = wrap.offsetHeight - window.innerHeight;
+    var progress   = Math.max(0, Math.min(1, -wrapTop / scrollable));
 
-    ScrollTrigger.create({
-      trigger : '.hero',   /* The full-screen hero section   */
-      pin     : true,      /* GSAP pins it while scrolling   */
-      start   : 'top top', /* Pin starts when hero hits top  */
-      end     : '+=4500',  /* 4500px of scroll ≈ 10s feeling */
-      scrub   : 1.2,       /* 1.2s lag = buttery smooth      */
-      anticipatePin: 1,    /* Avoids flicker on pin start    */
-
-      onUpdate: function (self) {
-        var t = self.progress * duration;
-
-        /* ── Scrub video ────────────────────────────────────
-           Only seek if difference > 1 frame (≈33ms at 30fps)
-           Avoids hammering the decoder unnecessarily.       */
-        if (Math.abs(vid.currentTime - t) > 0.033) {
-          vid.currentTime = t;
-        }
-
-        /* ── Text reveal ────────────────────────────────────
-           0–45%  → pure video, no text
-           45–55% → hero text fades in over video
-           55%+   → text stays fully visible               */
-        var textOpacity = Math.max(0, Math.min(1, (self.progress - 0.45) / 0.10));
-        if (hbody) hbody.style.opacity = textOpacity;
-
-        /* Scroll hint hides after first 3% */
-        if (hint) hint.style.opacity = self.progress < 0.03 ? 1 : 0;
-      },
-
-      onLeave: function () {
-        /* Ensure text stays visible after pin releases */
-        if (hbody) hbody.style.opacity = 1;
-      },
-
-      onEnterBack: function () {
-        /* Re-hide text if user scrolls back into zone at 0% */
-        if (hbody) hbody.style.opacity = 0;
+    /* Scrub video — only if ready & meaningful change */
+    if (vid.duration && vid.readyState >= 2) {
+      var target = progress * vid.duration;
+      if (Math.abs(vid.currentTime - target) > 0.025) {
+        vid.currentTime = target;
       }
-    });
+    }
 
-    console.log('[Vlore] Hero ScrollTrigger ready — duration:', duration.toFixed(2) + 's');
+    /* Text reveal:
+       0–45%  → no text (pure video)
+       45–55% → fades in
+       55%+   → fully visible            */
+    var textOpacity = Math.max(0, Math.min(1, (progress - 0.45) / 0.10));
+    if (hbody) hbody.style.opacity = textOpacity;
+    if (hint)  hint.style.opacity  = progress < 0.03 ? 1 : 0;
   }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+
+  window.addEventListener('resize', update);
 
   /* ── Wait for video metadata ─────────────────────────────── */
-  var ready = false;
-  function tryInit() {
-    if (ready) return;
-    if (!vid.duration || vid.duration === Infinity) return;
-    ready = true;
-    initGSAP();
-  }
+  vid.addEventListener('loadedmetadata', update);
+  vid.addEventListener('canplay',        update);
+  if (vid.readyState >= 1) update();
 
-  vid.addEventListener('loadedmetadata', tryInit);
-  vid.addEventListener('canplay',        tryInit);
-  vid.addEventListener('canplaythrough', tryInit);
-  if (vid.readyState >= 1) tryInit();
-
-  /* Fallback retry — handles cached/preloaded videos */
-  var retryTimer = setInterval(function () {
-    tryInit();
-    if (ready) clearInterval(retryTimer);
-  }, 250);
-
-  /* Stop retrying after 10 seconds */
-  setTimeout(function () { clearInterval(retryTimer); }, 10000);
+  /* Retry for cached videos that already have metadata */
+  var timer = setInterval(function () {
+    if (vid.duration) { clearInterval(timer); update(); }
+  }, 300);
+  setTimeout(function () { clearInterval(timer); }, 10000);
 
 })();
 </script>
