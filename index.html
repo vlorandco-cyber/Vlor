@@ -893,147 +893,7 @@ nav#nav,
   .mv-edot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:inline-block}
   .mv-edot.fe{background:rgba(255,255,255,.75);border-color:rgba(255,255,255,.5)}
   .mv-edot.fc{background:#D4AF37;border-color:rgba(212,175,55,.7);box-shadow:0 0 4px rgba(212,175,55,.4)}
-  
-/* ══ VISUAL SECTIONS ══════════════════════════════════════ */
-
-/* Full-width cinematic image divider */
-.vis-divider {
-  height: 50vh;
-  position: relative;
-  overflow: hidden;
-}
-.vis-divider img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
-  display: block;
-}
-.vis-divider-ov {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(0,0,0,0.55) 0%,
-    rgba(0,0,0,0.15) 50%,
-    rgba(0,0,0,0.55) 100%);
-}
-
-/* Work showcase grid — 3 cols */
-.vwork-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-.vwork-item {
-  overflow: hidden;
-  border-radius: 4px;
-  border: 1px solid rgba(212,175,55,0.14);
-  background: #111;
-  position: relative;
-}
-.vwork-item.wide { grid-column: span 2; }
-.vwork-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.7s ease;
-  aspect-ratio: 4/3;
-}
-.vwork-item.wide img { aspect-ratio: 16/9; }
-.vwork-item:hover img { transform: scale(1.04); }
-
-/* Brand row — 2 wide images */
-.vbrand-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 14px;
-}
-.vbrand-item {
-  overflow: hidden;
-  border-radius: 4px;
-  border: 1px solid rgba(212,175,55,0.14);
-  background: #111;
-  height: 260px;
-}
-.vbrand-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.7s ease;
-}
-.vbrand-item:hover img { transform: scale(1.04); }
-
-/* Client gallery — masonry style */
-.vclient-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  gap: 14px;
-}
-.vclient-item {
-  overflow: hidden;
-  border-radius: 4px;
-  background: #111;
-}
-.vclient-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  transition: transform 0.7s ease;
-}
-.vclient-item:hover img { transform: scale(1.04); }
-.vclient-item.h-sq  { aspect-ratio: 1/1; }
-.vclient-item.h-tall { aspect-ratio: 3/4; }
-.vclient-item.h-wide { aspect-ratio: 16/9; grid-column: span 2; }
-.vclient-item.h-land { aspect-ratio: 4/3; }
-
-/* CTA with image background */
-.quote-vis-wrap {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  border: 1px solid rgba(212,175,55,0.18);
-}
-.quote-vis-bg {
-  position: absolute; inset: 0;
-  z-index: 0;
-}
-.quote-vis-bg img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
-  display: block;
-}
-.quote-vis-bg::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg,
-    rgba(0,0,0,0.88) 0%,
-    rgba(0,0,0,0.70) 50%,
-    rgba(0,0,0,0.50) 100%);
-}
-.quote-vis-inner {
-  position: relative;
-  z-index: 1;
-  padding: 80px 40px;
-}
-
-@media(max-width:820px){
-  .vwork-grid  { grid-template-columns: repeat(2,1fr); }
-  .vwork-item.wide { grid-column: span 1; }
-  .vwork-item.wide img { aspect-ratio: 4/3; }
-  .vclient-grid { grid-template-columns: repeat(2,1fr); }
-  .vclient-item.h-wide { grid-column: span 1; aspect-ratio: 1/1; }
-  .vbrand-row  { grid-template-columns: 1fr; }
-  .vis-divider { height: 35vh; }
-  .quote-vis-inner { padding: 60px 24px; }
-}
-@media(max-width:500px){
-  .vwork-grid  { grid-template-columns: 1fr; }
-  .vclient-grid { grid-template-columns: 1fr; }
-}
-</style>
+  </style>
 
   <script>
   (function(){
@@ -1344,12 +1204,6 @@ nav#nav,
     </div>
   </section>
 
-  <!-- CINEMATIC DIVIDER: executive at dark desk -->
-  <div class="vis-divider">
-    <img src="vlore-exec.png" alt="" loading="lazy"/>
-    <div class="vis-divider-ov"></div>
-  </div>
-
   <!-- PROBLEM -->
   <section class="sec">
     <div class="wrap">
@@ -1421,91 +1275,18 @@ nav#nav,
     </div>
   </section>
 
-  <!-- OUR WORK / RESULTS VISUAL GRID -->
-  <section class="sec" style="background:#050505;">
-    <div class="wrap">
-      <span class="lbl rv">Our Work</span>
-      <div class="gline rv d1"></div>
-      <h2 class="t-lg rv d1" style="margin-bottom:48px">Real work.<br/>Real results.</h2>
-
-      <!-- 3-column grid: laptop mockups -->
-      <div class="vwork-grid rv d2">
-        <div class="vwork-item wide">
-          <img src="vlore-work-1.png" alt="Vlore homepage design" loading="lazy"/>
-        </div>
-        <div class="vwork-item">
-          <img src="vlore-work-2.png" alt="Vlore marketing system" loading="lazy"/>
-        </div>
-        <div class="vwork-item">
-          <img src="vlore-work-3.png" alt="Vlore services page" loading="lazy"/>
-        </div>
-        <div class="vwork-item">
-          <img src="vlore-work-4.png" alt="Vlore growth packages" loading="lazy"/>
-        </div>
-        <div class="vwork-item wide">
-          <img src="vlore-work-5.png" alt="Vlore services laptop" loading="lazy"/>
-        </div>
-      </div>
-
-      <!-- Brand identity row -->
-      <div class="vbrand-row rv d3">
-        <div class="vbrand-item">
-          <img src="vlore-brand-mag.png" alt="Vlore brand identity" loading="lazy"/>
-        </div>
-        <div class="vbrand-item">
-          <img src="vlore-brand-card.png" alt="Vlore business card" loading="lazy"/>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHO WE WORK WITH -->
-  <section class="sec" style="background:var(--black)">
-    <div class="wrap">
-      <span class="lbl rv">Our Clients</span>
-      <div class="gline rv d1"></div>
-      <h2 class="t-lg rv d1" style="margin-bottom:48px">Built for people who<br/><em class="gold">refuse to stay small.</em></h2>
-
-      <div class="vclient-grid rv d2">
-        <div class="vclient-item h-tall">
-          <img src="vlore-client-1.png" alt="" loading="lazy"/>
-        </div>
-        <div class="vclient-item h-sq">
-          <img src="vlore-client-2.png" alt="" loading="lazy"/>
-        </div>
-        <div class="vclient-item h-tall">
-          <img src="vlore-client-3.png" alt="" loading="lazy"/>
-        </div>
-        <div class="vclient-item h-wide">
-          <img src="vlore-client-4.png" alt="" loading="lazy"/>
-        </div>
-        <div class="vclient-item h-sq">
-          <img src="vlore-client-5.png" alt="" loading="lazy"/>
-        </div>
-        <div class="vclient-item h-sq">
-          <img src="vlore-client-6.png" alt="" loading="lazy"/>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- QUOTE CTA -->
   <section class="sec">
     <div class="wrap">
-      <div class="quote-vis-wrap rv">
-        <div class="quote-vis-bg">
-          <img src="vlore-cta-bg.png" alt="" loading="lazy"/>
-        </div>
-        <div class="quote-vis-inner quote-wrap">
-          <div class="qmark">"</div>
-          <h2 class="t-lg rv d1" style="font-style:italic;font-family:'Playfair Display',serif;margin-bottom:18px">
-            Your next revenue milestone<br/>isn't a matter of luck.<br/><span class="gold">It's a matter of execution.</span>
-          </h2>
-          <p class="body rv d2" style="margin:0 auto 40px;text-align:center;max-width:480px">We partner with businesses across every industry to build the marketing infrastructure, ad systems, and growth strategies that drive consistent, scalable revenue.</p>
-          <div class="rv d3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-            <a href="/book" class="btn btn-gold">Book a Consultation</a>
-            <a href="/about" class="btn btn-dim">About VLORE</a>
-          </div>
+      <div class="quote-wrap rv">
+        <div class="qmark">"</div>
+        <h2 class="t-lg rv d1" style="font-style:italic;font-family:'Playfair Display',serif;margin-bottom:18px">
+          Your next revenue milestone<br/>isn't a matter of luck.<br/><span class="gold">It's a matter of execution.</span>
+        </h2>
+        <p class="body rv d2" style="margin:0 auto 40px;text-align:center;max-width:480px">We partner with businesses across every industry to build the marketing infrastructure, ad systems, and growth strategies that drive consistent, scalable revenue.</p>
+        <div class="rv d3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="/book" class="btn btn-gold">Book a Consultation</a>
+          <a href="/about" class="btn btn-dim">About VLORE</a>
         </div>
       </div>
     </div>
